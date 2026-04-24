@@ -1061,7 +1061,7 @@ function Sacramento101({ admin }) {
       <div style={{ background: "#0c0c0c", border: "1px solid #181818", padding: "16px", marginBottom: "10px" }}>
         <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "10px" }}>THE BASICS</h3>
         <div style={{ color: "#aaa", fontSize: "13px", fontFamily: "var(--b)", lineHeight: 1.8 }}>
-          <p style={{ marginTop: 0 }}>California has a <strong style={{ color: "#fff" }}>bicameral legislature</strong>: 40 Senators, 80 Assembly Members. Sessions span two years (currently 2025-2026). In 2025, legislators introduced roughly <strong style={{ color: "#F9A825" }}>2,250 bills</strong>. Of those, <strong style={{ color: "#fff" }}>917 (about 41%)</strong> reached the Governor's desk. He signed <strong style={{ color: "#00E676" }}>794 (87%)</strong> and vetoed <strong style={{ color: "#FF1744" }}>123 (13%)</strong>. That means roughly <strong style={{ color: "#FF6D00" }}>59% of all introduced bills died before ever reaching the Governor</strong>, most of them killed quietly in committee or on the suspense file. Sources: <a href="https://calmatters.org" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>CalMatters</a>, <a href="https://capitolweekly.net" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>Capitol Weekly</a>.</p>
+          <p style={{ marginTop: 0 }}>California has a <strong style={{ color: "#fff" }}>bicameral legislature</strong>: 40 Senators, 80 Assembly Members. Sessions span two years — the current session runs <strong style={{ color: "#F9A825" }}>2025 through 2026</strong>. This tracker covers all <strong style={{ color: "#F9A825" }}>4,863 bills</strong> introduced across both years of the session. In Year 1 alone (2025), legislators introduced roughly <strong style={{ color: "#F9A825" }}>2,500 bills</strong>. Of those, about <strong style={{ color: "#fff" }}>41%</strong> reached the Governor's desk. Governor Newsom signed <strong style={{ color: "#00E676" }}>roughly 87%</strong> of what reached him and vetoed <strong style={{ color: "#FF1744" }}>about 13%</strong>. That means roughly <strong style={{ color: "#FF6D00" }}>59% of all introduced bills died before ever reaching the Governor</strong>, most of them killed quietly in committee or on the suspense file. The Year 2 (2026) session is currently ongoing. Sources: <a href="https://calmatters.org" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>CalMatters</a>, <a href="https://capitolweekly.net" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>Capitol Weekly</a>.</p>
         </div>
       </div>
       </Editable>
@@ -1111,14 +1111,16 @@ function Sacramento101({ admin }) {
         <p style={{ color: "#555", fontSize: "11px", fontFamily: "var(--m)", marginTop: 0, marginBottom: "10px" }}>Hover over any date for more detail on what it means and why it matters.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "8px" }}>
           {[
-            ["Jan 6, 2025", "Session convenes", "The two-year legislative session officially begins. Legislators are sworn in and can begin introducing bills. California's legislature meets year-round, unlike many other states."],
-            ["Feb 21, 2025", "Bill intro deadline (Yr 1)", "Last day for legislators to introduce new bills in the first year of the session. After this date, no new bills can be submitted until the second year begins. Legislators often rush to introduce bills right before this deadline."],
-            ["Jun 6, 2025", "Crossover deadline", "Last day for a bill to pass its house of origin (the chamber where it was introduced) and cross over to the other chamber. Bills that miss this deadline are effectively dead for the year. This is a critical pressure point: if your representative's bill hasn't moved by June, it's worth asking why."],
-            ["Sep 12, 2025", "Session adjourns (Yr 1)", "The legislature adjourns for the year. All bills that passed both chambers are sent to the Governor. Bills that did not pass are carried over to 2026 as 'two-year bills.'"],
-            ["Oct 12, 2025", "Governor signing deadline", "Last day for the Governor to sign or veto bills sent to him in the final weeks. If he takes no action, the bill becomes law without his signature. In 2025, Newsom signed 794 bills and vetoed 123 by this deadline."],
-            ["Jan 1, 2026", "2025 laws take effect", "Most bills signed during the 2025 session take effect on this date. Urgency measures that passed with a two-thirds vote already took effect upon signing."],
-            ["~Feb 20, 2026", "Bill intro deadline (Yr 2)", "Last day for legislators to introduce new bills for the second year of the session. New 2026 bills will be tracked in this tool after this deadline."],
-            ["Sep 2026", "Session adjourns (Yr 2)", "The full two-year session ends. Any bills that did not pass both chambers expire and must be reintroduced in the next session (2027-2028) if the author wants to pursue them again."]
+            ["Jan 6, 2025", "Session convenes ✓", "The two-year legislative session officially began. Legislators were sworn in and began introducing bills. California's legislature meets year-round, unlike many other states."],
+            ["Feb 21, 2025", "Bill intro deadline (Yr 1) ✓", "Last day for legislators to introduce new bills in the first year of the session. After this date, no new bills could be submitted until the second year began. Roughly 2,500 bills were introduced in Year 1."],
+            ["Jun 6, 2025", "Crossover deadline ✓", "Last day for a bill to pass its house of origin and cross over to the other chamber. Bills that missed this deadline were effectively dead for the year."],
+            ["Sep 12, 2025", "Session adjourns (Yr 1) ✓", "The legislature adjourned for the year. All bills that passed both chambers were sent to the Governor. Bills that did not pass were carried over to 2026 as 'two-year bills.'"],
+            ["Oct 12, 2025", "Governor signing deadline ✓", "Last day for the Governor to sign or veto bills. Newsom signed roughly 1,020 bills and vetoed 123. Bills he neither signed nor vetoed became law without his signature."],
+            ["Jan 1, 2026", "2025 laws took effect ✓", "Most bills signed during the 2025 session took effect on this date. Urgency measures that passed with a two-thirds vote took effect immediately upon signing."],
+            ["Feb 20, 2026", "Bill intro deadline (Yr 2) ✓", "Last day for legislators to introduce new bills for the second year of the session. All 2026 bills are now in this tracker. Year 2 tends to see fewer introductions — legislators focus on advancing their two-year bills."],
+            ["Jun 2026", "Crossover deadline (Yr 2)", "Last day for a 2026 bill to pass its house of origin and move to the other chamber. Bills that don't cross over by this date are dead for the session."],
+            ["Sep 2026", "Session adjourns (Yr 2)", "The full two-year session ends. Any bills that did not pass both chambers expire and must be reintroduced in the 2027-2028 session."],
+            ["Oct 2026", "Governor signing deadline (Yr 2)", "Last day for the Governor to act on bills from the 2026 session. Bills signed here take effect January 1, 2027."],
           ].map(([d, e, tip]) => (
             <Tooltip key={d} text={tip}>
               <div style={{ display: "flex", gap: "8px", cursor: "help", padding: "4px 0" }}>
@@ -1154,7 +1156,7 @@ function AboutPage({ admin }) {
     </div>
   );
 
-  const energyUsed = 2.25;
+  const energyUsed = 4.6;
   const energyCap = 17;
   const pct = Math.round((energyUsed / energyCap) * 100);
 
@@ -1164,9 +1166,11 @@ function AboutPage({ admin }) {
       <p style={{ color: "#666", fontSize: "12px", fontFamily: "var(--m)", marginBottom: "16px" }}>Methodology, framework, and the humans behind the data.</p>
 
       <Section id="method" title="METHODOLOGY">
-        <p>This tracker aggregates publicly available data on California legislation and analyzes it through a racial equity lens. Bill metadata (author, status, dates, vote history) is sourced directly from <a href="https://leginfo.legislature.ca.gov" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>leginfo.legislature.ca.gov</a>, the official California Legislative Information portal.</p>
-        <p>Each bill receives two equity classifications: a <strong style={{ color: "#fff" }}>proximity score</strong> (how directly the bill engages with race) and a <strong style={{ color: "#fff" }}>direction score</strong> (whether it advances or threatens equity). These classifications, along with plain-language summaries and rationale, are generated by AI (Claude, Anthropic) and then reviewed and verified by the project team. The AI reads the full bill text and committee analyses, then produces a draft assessment. A human researcher reviews each assessment for accuracy, nuance, and whether the AI missed relevant context.</p>
-        <p>We verified all 22 bill authors in this initial dataset against official legislative records, correcting 12 attribution errors from the AI-generated dataset (a 55% error rate). This illustrates exactly why human verification matters, and why every classification in this tracker should be read critically.</p>
+        <p>This tracker uses a two-layer architecture that separates facts from analysis — a deliberate design choice to eliminate the hallucinations that plagued earlier AI-only approaches.</p>
+        <p><strong style={{ color: "#fff" }}>Layer 1 — Facts (zero AI):</strong> All bill metadata — author, party, district, status, vote history, legislative lifecycle dates — is sourced directly from the <a href="https://legiscan.com" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>LegiScan API</a>, which mirrors the California Legislature's official records in near real-time. AI never touches these fields. This was a direct response to early prototype failures: AI generated wrong district numbers, fabricated dates, and misattributed bill sponsors.</p>
+        <p><strong style={{ color: "#fff" }}>Layer 2 — Analysis (AI-assisted, human-reviewed):</strong> Each bill's equity classification, rationale, and affected populations are generated by Claude (Anthropic). The AI reads the official bill title and legislative description and produces a draft equity assessment. Each assessment should be read critically — AI can miss political context, legislative history, and community-level nuance that isn't in the bill text.</p>
+        <p>The full dataset covers <strong style={{ color: "#F9A825" }}>all 4,863 bills</strong> introduced in California's 2025-2026 legislative session (both years), 100% classified as of April 2026.</p>
+        <p style={{ marginTop: "8px", color: "#666", fontSize: "12px" }}>Policy area tags are inferred by keyword matching on bill titles and descriptions, since LegiScan's subject-tagging for this session is incomplete. A bill can appear under multiple policy areas.</p>
       </Section>
 
       <Section id="framework" title="EQUITY FRAMEWORK">
@@ -1182,10 +1186,10 @@ function AboutPage({ admin }) {
       </Section>
 
       <Section id="data" title="DATA SOURCES">
-        <p>Bill text, authors, status, and vote history: <a href="https://leginfo.legislature.ca.gov" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>California Legislative Information</a> (official)</p>
-        <p>Process statistics: <a href="https://calmatters.org" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>CalMatters</a>, <a href="https://capitolweekly.net" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>Capitol Weekly</a>, <a href="https://calbudgetcenter.org" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>California Budget & Policy Center</a></p>
-        <p>Equity classifications: AI-generated (Claude, Anthropic), human-reviewed</p>
-        <p>This tool is not affiliated with the State of California.</p>
+        <p><strong style={{ color: "#fff" }}>Bill metadata</strong> (author, party, status, dates, lifecycle, votes): <a href="https://legiscan.com" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>LegiScan API</a>, which mirrors <a href="https://leginfo.legislature.ca.gov" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>leginfo.legislature.ca.gov</a> — the official California Legislative Information portal.</p>
+        <p><strong style={{ color: "#fff" }}>Equity classifications</strong>: AI-generated (Claude Sonnet, Anthropic), using official bill titles and legislative descriptions as input. Classifications cover all 4,863 bills in the 2025-2026 session.</p>
+        <p><strong style={{ color: "#fff" }}>Process statistics and context</strong>: <a href="https://calmatters.org" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>CalMatters</a>, <a href="https://capitolweekly.net" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>Capitol Weekly</a>, <a href="https://calbudgetcenter.org" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>California Budget & Policy Center</a></p>
+        <p style={{ marginTop: "8px", color: "#666", fontSize: "12px" }}>This tool is not affiliated with the State of California. Data is updated monthly aligned with the legislative calendar.</p>
       </Section>
 
       <Section id="energy" title="ENERGY & AI ACCOUNTABILITY">
@@ -1194,13 +1198,13 @@ function AboutPage({ admin }) {
         <p style={{ marginTop: "10px" }}><strong style={{ color: "#fff" }}>Our energy cap: 17 kWh per year.</strong></p>
         <p>That is the energy equivalent of driving from UCLA to Los Angeles City Hall once: 13 miles, about half a gallon of gas. The symbolism is intentional: this tool is built by a researcher at UCLA thinking about policy that shapes the city. We believe the tradeoff is worth it for public transparency, but we commit to keeping the footprint small.</p>
         <p style={{ marginTop: "10px" }}><strong style={{ color: "#F9A825" }}>How the energy budget breaks down:</strong></p>
-        <p>The initial classification of 22 bills used approximately <strong style={{ color: "#fff" }}>2.25 kWh (13% of our annual cap)</strong>. The remaining 14.75 kWh covers monthly status updates for the full 2,250-bill session through the rest of the year. Each monthly update checks for status changes on tracked bills and reclassifies any that have been substantially amended, using roughly 0.5 to 1 kWh per update. At that rate, 10 monthly updates would use about 5 to 10 kWh, keeping us well within our annual budget.</p>
-        <p>The tracker itself uses zero ongoing AI energy. It is a static application that runs entirely in your browser. No server, no database, no API calls when you use it. Classifications are generated in batches and reviewed by humans before publication.</p>
+        <p>Building and prototyping the tracker used approximately <strong style={{ color: "#fff" }}>2.25 kWh</strong>. Classifying all 4,863 bills in the full 2025-2026 session used approximately <strong style={{ color: "#fff" }}>2.33 kWh</strong> (2.33 million tokens at roughly 1 kWh per million tokens). Total so far: <strong style={{ color: "#fff" }}>~4.6 kWh — 27% of our annual cap</strong>. The remaining 12.4 kWh covers monthly status updates through the end of the session. Each monthly update checks for status changes and reclassifies amended bills, using roughly 0.5 to 1 kWh per update.</p>
+        <p>The tracker itself uses zero ongoing AI energy. It is a static application that runs entirely in your browser. No server, no database, no API calls when you use it. Classifications are generated in batches and published as static data.</p>
         <div style={{ background: "#111", border: "1px solid #222", borderRadius: "2px", height: "20px", marginTop: "8px", overflow: "hidden", position: "relative" }}>
           <div style={{ background: `linear-gradient(90deg, #D50000, #FF6D00)`, width: `${pct}%`, height: "100%", transition: "width 0.5s" }} />
           <span style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", fontFamily: "var(--m)", fontSize: "9px", color: "#fff", fontWeight: 700 }}>{energyUsed} / {energyCap} kWh ({pct}%)</span>
         </div>
-        <p style={{ fontSize: "11px", color: "#555", marginTop: "6px" }}>Last updated: February 6, 2026</p>
+        <p style={{ fontSize: "11px", color: "#555", marginTop: "6px" }}>Last updated: April 2026 · Total tokens used: 2,326,750 · Model: Claude Sonnet (Anthropic)</p>
       </Section>
 
       <Section id="built" title="BUILT BY">
@@ -1212,23 +1216,25 @@ function AboutPage({ admin }) {
       </Section>
 
       <Section id="roadmap" title="ROADMAP">
-        <p style={{ marginBottom: "10px" }}>Here is what we are building next. Features are listed roughly in order of priority.</p>
+        <p style={{ marginBottom: "10px" }}>Here is what we have built and what is coming next.</p>
         <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
           {[
-            ["Full 2,250-bill dataset", "Expand from 25 curated bills to the complete 2025 session, with equity classifications for ~200-400 bills with clear racial equity dimensions and basic metadata for the rest.", "In progress"],
-            ["Budget equity tracker", "Dedicated view for the state budget: track how dollars flow to communities by race, region, and income level. Visualize who benefits from line items in the $300B+ California budget.", "Planned"],
-            ["2026 bill tracking", "Add new bills after the February 2026 introduction deadline, with monthly status updates through the session.", "Planned"],
-            ["District map", "Interactive map of California showing legislative activity by district, with the ability to look up your representatives and see their equity record.", "Planned"],
-            ["Mobile responsiveness", "Optimize the interface for phone and tablet screens.", "Planned"],
-            ["Export and share", "Download filtered bill lists as CSV for assignments, share watchlists via URL.", "Exploring"],
+            ["Full 4,863-bill dataset", "All bills introduced in California's 2025-2026 session — both years — with equity classifications for every single bill. 100% classified as of April 2026.", "Done"],
+            ["LegiScan data pipeline", "Automated pipeline separating facts (LegiScan API: authors, status, dates, votes — zero AI) from analysis (Claude: equity classification). Eliminates hallucinations from earlier prototype.", "Done"],
+            ["2026 bill tracking", "All 2026 bills introduced after the February 20, 2026 deadline are now in the tracker, with equity classifications.", "Done"],
+            ["Monthly status updates", "Refresh bill statuses, add new votes and Governor actions as the 2026 session progresses through September. Target cadence: monthly, aligned with the legislative calendar.", "In progress"],
+            ["Bill detail deep-dives", "Expand individual bill view to include full vote breakdowns by legislator, amendment history, and committee testimony links.", "Planned"],
+            ["District map", "Interactive map of California showing legislative activity by district. Look up your representative and see their full equity record.", "Planned"],
+            ["Export and share", "Download filtered bill lists as CSV for class assignments, share watchlists via URL.", "Planned"],
+            ["Budget equity tracker", "Dedicated view for the state budget: track how dollars flow to communities by race, region, and income level across the $300B+ California budget.", "Exploring"],
             ["Community tagging", "Allow users to suggest equity tags and flag analyses for review, with submissions going to a moderated queue.", "Exploring"],
           ].map(([title, desc, status]) => (
-            <div key={title} style={{ background: "#111", border: "1px solid #1e1e1e", padding: "10px 12px" }}>
+            <div key={title} style={{ background: "#111", border: `1px solid ${status === "Done" ? "#1a2a1a" : "#1e1e1e"}`, padding: "10px 12px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "4px" }}>
-                <span style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#fff", fontWeight: 700 }}>{title}</span>
-                <span style={{ fontFamily: "var(--m)", fontSize: "8px", color: status === "In progress" ? "#00E676" : status === "Planned" ? "#F9A825" : "#666", fontWeight: 700, letterSpacing: "0.5px" }}>{status.toUpperCase()}</span>
+                <span style={{ fontFamily: "var(--m)", fontSize: "11px", color: status === "Done" ? "#888" : "#fff", fontWeight: 700 }}>{status === "Done" && "✓ "}{title}</span>
+                <span style={{ fontFamily: "var(--m)", fontSize: "8px", color: status === "Done" ? "#2e7d32" : status === "In progress" ? "#00E676" : status === "Planned" ? "#F9A825" : "#666", fontWeight: 700, letterSpacing: "0.5px" }}>{status.toUpperCase()}</span>
               </div>
-              <div style={{ fontSize: "11px", color: "#888", fontFamily: "var(--b)", lineHeight: 1.5 }}>{desc}</div>
+              <div style={{ fontSize: "11px", color: status === "Done" ? "#555" : "#888", fontFamily: "var(--b)", lineHeight: 1.5 }}>{desc}</div>
             </div>
           ))}
         </div>
