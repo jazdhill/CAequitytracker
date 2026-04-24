@@ -596,21 +596,21 @@ function normalizeBill(bill) {
   // Infer topics from title + description since LegiScan subjects field is empty
   const titleDesc = ((bill.title || "") + " " + (bill.description || "")).toLowerCase();
   const topicRules = [
-    ["Labor & Workers' Rights",    /\b(labor|worker|wage|employ|union|bargain|workplace|workers' comp|tip|layoff|overtime|paid leave|hiring)\b/],
-    ["Education (K-12)",           /\b(school|k-12|pupil|student|teacher|curriculum|district|classroom|charter school|transitional kindergarten)\b/],
-    ["Higher Education",           /\b(university|college|community college|calfresh|financial aid|student loan|campus|higher education|uc |csu )\b/],
-    ["Housing & Homelessness",     /\b(hous|rent|tenant|landlord|homeless|evict|affordable housing|zoning|ceqa|infill)\b/],
-    ["Policing & Criminal Justice",/\b(police|criminal|justice|prison|parole|incarcerat|sentenc|felony|probation|arrest|detain|law enforcement)\b/],
-    ["Immigration",                /\b(immigr|undocumented|visa|ice |asylum|daca|migrant|citizenship)\b/],
-    ["Health & Public Health",     /\b(health|medical|medi-cal|mental health|hospital|clinic|pharmaceutical|drug|cannabis|overdose|vaccine)\b/],
-    ["Civil Rights & Voting",      /\b(civil rights|voting|election|discrimination|equal pay|bias|harassment|hate crime|ballot)\b/],
-    ["Environment & Climate",      /\b(environment|climate|carbon|emissions|wildfire|drought|pollution|ceqa|clean energy)\b/],
-    ["Technology & AI",            /\b(artificial intelligence|\bai\b|algorithm|automated|data privacy|deepfake|technology|cybersecurity|social media)\b/],
-    ["Economic Development",       /\b(economic|business|small business|entrepreneur|commerce|workforce development|tax credit|loan|grant program)\b/],
-    ["Transportation",             /\b(transport|highway|transit|vehicle|road|rail|uber|lyft|rideshare|truck|bus)\b/],
-    ["Food & Agriculture",         /\b(food|farm|agriculture|calfresh|nutrition|pesticide|crop|livestock)\b/],
-    ["Children & Families",        /\b(child|family|families|foster|adoption|youth|juvenile|daycare|childcare|parent)\b/],
-    ["Disability Services",        /\b(disabilit|ada|accessibility|blind|deaf|developmental)\b/],
+    ["Labor & Workers' Rights",    /\b(labor|worker|wage|employ|union|bargain|workplace|workers.comp|tip|layoff|overtime|paid leave|hiring)/],
+    ["Education (K-12)",           /\b(school|k-12|pupil|student|teacher|curriculum|classroom|charter school|transitional kindergarten)/],
+    ["Higher Education",           /\b(university|college|community college|financial aid|student loan|campus|higher education|uc |csu )/],
+    ["Housing & Homelessness",     /\b(hous|rent|tenant|landlord|homeless|evict|affordable housing|zoning|ceqa|infill)/],
+    ["Policing & Criminal Justice",/\b(police|criminal justice|prison|parole|incarcerat|sentenc|felony|probation|arrest|detain|law enforcement)/],
+    ["Immigration",                /\b(immigr|undocumented|visa|\bice\b|asylum|daca|migrant|citizenship)/],
+    ["Health & Public Health",     /\b(health|medical|medi-cal|mental health|hospital|clinic|pharmaceutical|drug|cannabis|overdose|vaccine)/],
+    ["Civil Rights & Voting",      /\b(civil rights|voting|election|discriminat|equal pay|bias|harassment|hate crime|ballot)/],
+    ["Environment & Climate",      /\b(environment|climate|carbon|emissions|wildfire|drought|pollution|clean energy)/],
+    ["Technology & AI",            /\b(artificial intelligence|\bai\b|algorithm|automat|data privacy|deepfake|technolog|cybersecurity|social media)/],
+    ["Economic Development",       /\b(economic|business|small business|entrepreneur|commerce|workforce development|tax credit|\bgrant\b)/],
+    ["Transportation",             /\b(transport|highway|transit|vehicle|road|rail|\buber\b|\blyft\b|rideshare|truck|\bbus\b)/],
+    ["Food & Agriculture",         /\b(food|farm|agricultur|calfresh|nutrition|pesticide|crop|livestock)/],
+    ["Children & Families",        /\b(child|family|families|foster|adoption|youth|juvenile|daycare|childcare|parent)/],
+    ["Disability Services",        /\b(disabilit|\bada\b|accessibility|blind|deaf|developmental)/],
   ];
   const inferredTopics = topicRules
     .filter(([, re]) => re.test(titleDesc))
