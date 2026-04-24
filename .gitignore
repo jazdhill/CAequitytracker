@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Environment variables (NEVER commit API keys)
+.env
+.env.local
+.env.*.local
+
+# Pipeline (Python scripts + data processing — not needed for website)
+pipeline/
+
+# Extra JSON at project root (the real file lives in public/)
+/ca_equity_bills_2025.json
+
+# macOS junk
+.DS_Store
+
+# Vercel
+.vercel
