@@ -689,6 +689,7 @@ function normalizeBill(bill) {
     dateIntroduced: lc.introduced_date || "",
     lastAction: lastStep?.date || "",
     lastActionText: lastStep?.detail || "",
+    stage: lastStep?.label || "Introduced",
     equityProximity,
     equityDirection,
     equityRationale: eq.rationale || "",
@@ -728,6 +729,7 @@ const INTERSECTIONAL = ["Gender", "LGBTQ+", "Disability", "Working-class"];
 const EQUITY_PROXIMITY = { explicit: "Explicit", structural: "Structural" };
 const EQUITY_DIRECTION = { advances: "Advances equity", threatens: "Threatens equity", mixed: "Mixed" };
 const STATUS_OPTS = ["Signed into Law", "Vetoed", "Passed Legislature", "Referred to Ballot", "Failed in Committee"];
+const STAGE_ORDER = ["Introduced", "Committee", "Fiscal", "Floor (1st)", "2nd Chamber", "Floor (2nd)", "Enrolled", "Signed", "Vetoed", "Failed"];
 const COLORS = {
   "Black": "#C62828", "Latino/a/e": "#E65100", "Asian": "#6A1B9A", "Indigenous": "#2E7D32",
   "Immigrants": "#0277BD", "MENA": "#00695C", "Gender": "#AD1457", "LGBTQ+": "#7B1FA2",
@@ -1563,6 +1565,10 @@ export default function App() {
   }, []);
 
   const ALL_AUTHORS = useMemo(() => [...new Set(bills.map(b => b.author))].sort(), [bills]);
+  const ALL_STAGES = useMemo(() => {
+    const present = new Set(bills.map(b => b.stage));
+    return STAGE_ORDER.filter(s => present.has(s));
+  }, [bills]);
   const [search, setSearch] = useState("");
   const [chamber, setChamber] = useState("all");
   const [partyF, setPartyF] = useState("all");
@@ -1576,6 +1582,7 @@ export default function App() {
   const [topicF, setTopicF] = useState([]);
   const [statusF, setStatusF] = useState([]);
   const [authorF, setAuthorF] = useState([]);
+  const [stageF, setStageF] = useState([]);
   const [modalBill, setModalBill] = useState(null);
   const [sortBy, setSortBy] = useState("number");
   const [sortDir, setSortDir] = useState("asc");
@@ -1620,9 +1627,10 @@ export default function App() {
     if (directionF.length) b = b.filter(x => directionF.includes(x.equityDirection));
     if (topicF.length) b = b.filter(x => x.topics.some(t => topicF.includes(t)));
     if (authorF.length) b = b.filter(x => authorF.includes(x.author));
+    if (stageF.length) b = b.filter(x => stageF.includes(x.stage));
     if (showStarred) b = b.filter(x => starredIds.includes(x.id));
     return b;
-  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, authorF, showStarred, starredIds]);
+  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, authorF, stageF, showStarred, starredIds]);
 
   const filtered = useMemo(() => {
     let b = statusF.length ? filteredBase.filter(x => statusF.includes(x.status)) : filteredBase;
@@ -1634,8 +1642,8 @@ export default function App() {
     return b;
   }, [filteredBase, statusF, sortBy, sortDir]);
 
-  const clearAll = () => { setSearch(""); setChamber("all"); setPartyF("all"); setRaceF([]); setGenderF(false); setLgbtqF(false); setDisabilityF(false); setWorkingF(false); setProximityF([]); setDirectionF([]); setTopicF([]); setStatusF([]); setAuthorF([]); setShowStarred(false); };
-  const anyF = search || chamber !== "all" || partyF !== "all" || raceF.length || genderF || lgbtqF || disabilityF || workingF || proximityF.length || directionF.length || topicF.length || statusF.length || authorF.length || showStarred;
+  const clearAll = () => { setSearch(""); setChamber("all"); setPartyF("all"); setRaceF([]); setGenderF(false); setLgbtqF(false); setDisabilityF(false); setWorkingF(false); setProximityF([]); setDirectionF([]); setTopicF([]); setStatusF([]); setAuthorF([]); setStageF([]); setShowStarred(false); };
+  const anyF = search || chamber !== "all" || partyF !== "all" || raceF.length || genderF || lgbtqF || disabilityF || workingF || proximityF.length || directionF.length || topicF.length || statusF.length || authorF.length || stageF.length || showStarred;
 
   const statFilter = (status) => {
     if (statusF.length === 1 && statusF[0] === status) setStatusF([]);
@@ -1716,6 +1724,10 @@ export default function App() {
                   <div>
                     <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>SPONSOR</div>
                     <DropdownMulti label="Bill Sponsor" selected={authorF} onChange={setAuthorF} options={ALL_AUTHORS} year={year} countFn={a => bills.filter(b => b.author === a && b.year === year).length} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>LIFECYCLE STAGE</div>
+                    <DropdownMulti label="Lifecycle Stage" selected={stageF} onChange={setStageF} options={ALL_STAGES} year={year} countFn={s => bills.filter(b => b.stage === s && b.year === year).length} />
                   </div>
                 </div>
 
