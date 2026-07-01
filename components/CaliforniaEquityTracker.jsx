@@ -1503,7 +1503,10 @@ export default function App() {
     else { setSortBy(field); setSortDir("asc"); }
   };
 
-  const filtered = useMemo(() => {
+  // Every filter except status — used to drive the per-status stat counts, so those
+  // counts react to race/chamber/search/etc. filters without collapsing to 0 once a
+  // status is already selected.
+  const filteredBase = useMemo(() => {
     let b = bills.filter(x => x.year === year);
     if (search) { const q = search.toLowerCase(); b = b.filter(x => x.title.toLowerCase().includes(q) || x.summary.toLowerCase().includes(q) || x.author.toLowerCase().includes(q) || x.number.toLowerCase().includes(q) || x.equityRationale.toLowerCase().includes(q)); }
     if (chamber !== "all") b = b.filter(x => x.chamber.toLowerCase() === chamber);
@@ -1516,15 +1519,20 @@ export default function App() {
     if (proximityF.length) b = b.filter(x => proximityF.includes(x.equityProximity));
     if (directionF.length) b = b.filter(x => directionF.includes(x.equityDirection));
     if (topicF.length) b = b.filter(x => x.topics.some(t => topicF.includes(t)));
-    if (statusF.length) b = b.filter(x => statusF.includes(x.status));
     if (authorF.length) b = b.filter(x => authorF.includes(x.author));
     if (showStarred) b = b.filter(x => starredIds.includes(x.id));
+    return b;
+  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, authorF, showStarred, starredIds]);
+
+  const filtered = useMemo(() => {
+    let b = statusF.length ? filteredBase.filter(x => statusF.includes(x.status)) : filteredBase;
 
     const dir = sortDir === "asc" ? 1 : -1;
+    b = [...b];
     if (sortBy === "number") b.sort((a, c) => dir * a.number.localeCompare(c.number, undefined, { numeric: true }));
     else if (sortBy === "name") b.sort((a, c) => dir * a.title.localeCompare(c.title));
     return b;
-  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, statusF, authorF, sortBy, sortDir, showStarred, starredIds]);
+  }, [filteredBase, statusF, sortBy, sortDir]);
 
   const clearAll = () => { setSearch(""); setChamber("all"); setPartyF("all"); setRaceF([]); setGenderF(false); setLgbtqF(false); setDisabilityF(false); setWorkingF(false); setProximityF([]); setDirectionF([]); setTopicF([]); setStatusF([]); setAuthorF([]); setShowStarred(false); };
   const anyF = search || chamber !== "all" || partyF !== "all" || raceF.length || genderF || lgbtqF || disabilityF || workingF || proximityF.length || directionF.length || topicF.length || statusF.length || authorF.length || showStarred;
@@ -1641,7 +1649,7 @@ export default function App() {
                   { l: "FAILED", sub: "in committee", status: "Failed in Committee", c: "#FF6D00" },
                   { l: "VETOED", sub: "by governor", status: "Vetoed", c: "#FF1744" },
                 ].map(s => {
-                  const count = s.status ? bills.filter(b => b.year === year && b.status === s.status).length : filtered.length;
+                  const count = s.status ? filteredBase.filter(b => b.status === s.status).length : filtered.length;
                   const isActive = s.status && statusF.length === 1 && statusF[0] === s.status;
                   return (
                     <div key={s.l} onClick={s.status ? () => statFilter(s.status) : undefined} style={{
