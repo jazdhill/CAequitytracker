@@ -726,6 +726,7 @@ const ALL_TOPICS = [
 ];
 const RACE_TAGS = ["Black", "Latino/a/e", "Asian", "Indigenous", "Immigrants", "MENA"];
 const INTERSECTIONAL = ["Gender", "LGBTQ+", "Disability", "Working-class"];
+const INTERSECTIONAL_LABELS = { "Gender": "Women" };
 const EQUITY_PROXIMITY = { explicit: "Explicit", structural: "Structural" };
 const EQUITY_DIRECTION = { advances: "Advances equity", threatens: "Threatens equity", mixed: "Mixed" };
 const STATUS_OPTS = ["Signed into Law", "Vetoed", "Passed Legislature", "Referred to Ballot", "Failed in Committee"];
@@ -1047,7 +1048,7 @@ function BillModal({ bill, onClose, starred, onStar, admin }) {
 
         <div style={{ display: "flex", gap: "3px", flexWrap: "wrap", marginBottom: "14px" }}>
           {bill.race.map(t => <Chip key={t} label={t} color={COLORS[t]} />)}
-          {bill.gender && <Chip label="Gender" color={COLORS["Gender"]} />}
+          {bill.gender && <Chip label="Women" color={COLORS["Gender"]} />}
           {bill.lgbtq && <Chip label="LGBTQ+" color={COLORS["LGBTQ+"]} />}
           {bill.disability && <Chip label="Disability" color={COLORS["Disability"]} />}
           {bill.workingClass && <Chip label="Working-class" color={COLORS["Working-class"]} />}
@@ -1782,7 +1783,7 @@ export default function App() {
                   <div style={{ display: "flex", gap: "3px", flexWrap: "wrap", alignItems: "center" }}>
                     {RACE_TAGS.map(t => <FilterBtn key={t} label={t} active={raceF.includes(t)} onClick={() => tog(raceF, setRaceF, t)} color={COLORS[t]} />)}
                     <span style={{ width: "1px", height: "20px", background: "#2a2a2a", margin: "0 3px" }} />
-                    {INTERSECTIONAL.map(t => <FilterBtn key={t} label={t} active={intActive(t)} onClick={() => togInt(t)} color={COLORS[t]} />)}
+                    {INTERSECTIONAL.map(t => <FilterBtn key={t} label={INTERSECTIONAL_LABELS[t] || t} active={intActive(t)} onClick={() => togInt(t)} color={COLORS[t]} />)}
                   </div>
                 </div>
 
