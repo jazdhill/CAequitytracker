@@ -1,11 +1,11 @@
 """
-Generate plain-English summaries for equity-relevant bills.
+Generate plain-English summaries for all bills.
 Adds equity_analysis.summary to each bill — picked up by normalizeBill()
 over the raw 'relating to X' extraction.
 
-Targets: DIRECT EQUITY IMPACT, STRUCTURAL EQUITY IMPACT, EQUITY RELEVANT
+Targets: every bill (equity-relevant and not)
 Skips:   Bills that already have equity_analysis.summary set
-Cost:    ~100 output tokens/bill × ~4,100 bills ≈ $0.50-1.00, ~0.25 kWh
+Cost:    ~100 output tokens/bill × ~4,863 bills ≈ $0.60-1.20, ~0.3 kWh
 """
 
 import json
@@ -91,8 +91,7 @@ def main():
     # Find bills that need summaries
     targets = [
         (i, b) for i, b in enumerate(bills)
-        if b.get("equity_analysis", {}).get("classification") in EQUITY_CLASSES
-        and not b.get("equity_analysis", {}).get("summary")
+        if not b.get("equity_analysis", {}).get("summary")
     ]
 
     print(f"Total bills: {len(bills)}")

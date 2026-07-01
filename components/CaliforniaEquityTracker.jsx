@@ -697,7 +697,17 @@ function normalizeBill(bill) {
     disability: race.includes("Disability"),
     workingClass: race.includes("Working-class"),
     url: bill.url || bill.state_link || "",
-    year: lc.introduced_date ? parseInt(lc.introduced_date.slice(0, 4)) : 2025,
+    year: (() => {
+      // LegiScan leaves introduced_date null for ~half the dataset — fall back to
+      // the earliest known activity date so bills land in the correct session year.
+      const dates = [lc.introduced_date, ...(lc.committee_dates || []), ...(lc.floor_dates || [])];
+      (bill.texts || []).forEach(t => t.date && dates.push(t.date));
+      ["passed_house", "passed_senate", "signed_date", "vetoed_date", "died_date"].forEach(k => lc[k] && dates.push(lc[k]));
+      const earliest = dates.filter(Boolean).sort()[0];
+      const y = earliest ? parseInt(earliest.slice(0, 4)) : 2025;
+      // Bills pre-filed in December before the session convenes still count as Year 1.
+      return y < 2025 ? 2025 : y;
+    })(),
     lifecycle: steps,
   };
 }
