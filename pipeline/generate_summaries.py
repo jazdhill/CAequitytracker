@@ -62,7 +62,8 @@ def summarize_bill(client, bill):
                 model=MODEL,
                 max_tokens=120,
                 system=SYSTEM_PROMPT,
-                messages=[{"role": "user", "content": prompt}]
+                messages=[{"role": "user", "content": prompt}],
+                timeout=30.0,
             )
             summary = response.content[0].text.strip()
             tokens = response.usage.input_tokens + response.usage.output_tokens
@@ -70,8 +71,9 @@ def summarize_bill(client, bill):
         except Exception as e:
             err = str(e)
             if "credit" in err.lower() or "billing" in err.lower():
-                print(f"\n  CREDITS EXHAUSTED — stopping.")
+                print(f"\n  CREDITS EXHAUSTED — stopping.", flush=True)
                 return None, 0
+            print(f"  ! {bill_number} attempt {attempt+1}/3 failed: {err[:150]}", flush=True)
             if attempt == 2:
                 return None, 0
             time.sleep(2 ** attempt)
@@ -107,7 +109,7 @@ def main():
         print("Nothing to do — all equity-relevant bills already have summaries.")
         return
 
-    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY)
+    client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY, timeout=30.0, max_retries=1)
 
     total_tokens = 0
     done = 0
