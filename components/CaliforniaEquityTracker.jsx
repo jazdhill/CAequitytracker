@@ -1440,7 +1440,7 @@ export default function App() {
   const [bills, setBills] = useState(BILLS_DATA);
   const [loadingData, setLoadingData] = useState(true);
   const [view, setView] = useState("bills"); // bills | sac101 | about
-  const [year, setYear] = useState(2025);
+  const [year, setYear] = useState(2026);
 
   useEffect(() => {
     fetch("/ca_equity_bills_2025.json")
