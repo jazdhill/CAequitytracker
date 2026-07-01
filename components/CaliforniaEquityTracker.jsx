@@ -729,11 +729,11 @@ const COLORS = {
 // SMALL COMPONENTS
 // ============================================================
 function Chip({ label, color, small }) {
-  return <span style={{ background: color || "#333", color: "#fff", padding: small ? "1px 5px" : "2px 7px", borderRadius: "2px", fontSize: small ? "8px" : "10px", fontWeight: 600, letterSpacing: "0.2px", fontFamily: "var(--m)", whiteSpace: "nowrap" }}>{label}</span>;
+  return <span style={{ background: color || "#333", color: "#fff", padding: small ? "2px 6px" : "3px 8px", borderRadius: "2px", fontSize: small ? "11px" : "12px", fontWeight: 600, letterSpacing: "0.2px", fontFamily: "var(--m)", whiteSpace: "nowrap" }}>{label}</span>;
 }
 
 function FilterBtn({ label, active, onClick, color }) {
-  return <button onClick={onClick} style={{ background: active ? (color || "#D50000") : "transparent", color: active ? "#fff" : "#666", border: `1px solid ${active ? "transparent" : "#2a2a2a"}`, padding: "4px 9px", borderRadius: "2px", fontSize: "11px", fontFamily: "var(--m)", fontWeight: 600, cursor: "pointer", transition: "all 0.1s", whiteSpace: "nowrap" }}>{label}</button>;
+  return <button onClick={onClick} style={{ background: active ? (color || "#D50000") : "transparent", color: active ? "#fff" : "#888", border: `1px solid ${active ? "transparent" : "#2a2a2a"}`, padding: "5px 11px", borderRadius: "2px", fontSize: "13px", fontFamily: "var(--m)", fontWeight: 600, cursor: "pointer", transition: "all 0.1s", whiteSpace: "nowrap" }}>{label}</button>;
 }
 
 function Tooltip({ children, text }) {
@@ -748,7 +748,7 @@ function Tooltip({ children, text }) {
         <div style={{
           position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)",
           background: "#1a1a1a", border: "1px solid #333", padding: "6px 10px", borderRadius: "3px",
-          fontSize: "11px", color: "#ccc", fontFamily: "var(--m)", whiteSpace: "normal",
+          fontSize: "12px", color: "#ccc", fontFamily: "var(--m)", whiteSpace: "normal",
           zIndex: 100, pointerEvents: "none", lineHeight: 1.4, minWidth: "140px", maxWidth: "240px", textAlign: "center",
           boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
         }}>
@@ -781,11 +781,11 @@ function CountdownTicker({ target }) {
         {units.map(([label, val]) => (
           <div key={label} style={{ background: "#111", border: "1px solid #1e1e1e", padding: "10px 14px", minWidth: "60px", textAlign: "center" }}>
             <div style={{ fontFamily: "var(--s)", fontSize: "26px", color: past ? "#00E676" : "#D50000", fontWeight: 700, lineHeight: 1 }}>{String(val).padStart(2, "0")}</div>
-            <div style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#555", letterSpacing: "1.5px", marginTop: "4px", fontWeight: 700 }}>{label}</div>
+            <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#888", letterSpacing: "1.5px", marginTop: "4px", fontWeight: 700 }}>{label}</div>
           </div>
         ))}
       </div>
-      {!past && <div style={{ fontFamily: "var(--b)", fontSize: "11px", color: "#444", marginTop: "8px" }}>until first 2026 bills drop</div>}
+      {!past && <div style={{ fontFamily: "var(--b)", fontSize: "13px", color: "#666", marginTop: "8px" }}>until first 2026 bills drop</div>}
     </div>
   );
 }
@@ -808,10 +808,10 @@ function DropdownMulti({ label, selected, onChange, options, year, countFn }) {
     <div ref={ref} style={{ position: "relative" }}>
       <button onClick={() => setOpen(!open)} style={{
         background: "#111", border: `1px solid ${selected.length ? "#D50000" : "#2a2a2a"}`, color: selected.length ? "#fff" : "#666",
-        padding: "7px 12px", fontFamily: "var(--m)", fontSize: "11px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", minWidth: "200px",
+        padding: "8px 14px", fontFamily: "var(--m)", fontSize: "13px", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", minWidth: "200px",
       }}>
         <span>{label} {selected.length > 0 && `(${selected.length})`}</span>
-        <span style={{ marginLeft: "auto", fontSize: "9px" }}>{open ? "\u25B2" : "\u25BC"}</span>
+        <span style={{ marginLeft: "auto", fontSize: "11px" }}>{open ? "\u25B2" : "\u25BC"}</span>
       </button>
       {open && (
         <div style={{
@@ -819,10 +819,10 @@ function DropdownMulti({ label, selected, onChange, options, year, countFn }) {
           zIndex: 50, maxHeight: "320px", overflowY: "auto", minWidth: "280px", boxShadow: "0 8px 24px rgba(0,0,0,0.6)",
         }}>
           {options.length > 8 && <div style={{ padding: "6px 8px", borderBottom: "1px solid #1a1a1a" }}>
-            <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: "100%", background: "#0a0a0a", border: "1px solid #222", color: "#fff", padding: "4px 8px", fontSize: "11px", fontFamily: "var(--m)", outline: "none" }} />
+            <input type="text" placeholder="Search..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: "100%", background: "#0a0a0a", border: "1px solid #222", color: "#fff", padding: "5px 8px", fontSize: "13px", fontFamily: "var(--m)", outline: "none" }} />
           </div>}
           {selected.length > 0 && <div style={{ padding: "6px 10px", borderBottom: "1px solid #1a1a1a" }}>
-            <button onClick={() => onChange([])} style={{ background: "none", border: "none", color: "#D50000", fontFamily: "var(--m)", fontSize: "10px", cursor: "pointer", fontWeight: 700 }}>CLEAR</button>
+            <button onClick={() => onChange([])} style={{ background: "none", border: "none", color: "#D50000", fontFamily: "var(--m)", fontSize: "12px", cursor: "pointer", fontWeight: 700 }}>CLEAR</button>
           </div>}
           {filtered.map(t => {
             const count = countFn ? countFn(t) : null;
@@ -839,10 +839,10 @@ function DropdownMulti({ label, selected, onChange, options, year, countFn }) {
                   background: active ? "#D50000" : "transparent", borderRadius: "2px",
                   display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                 }}>
-                  {active && <span style={{ color: "#fff", fontSize: "10px", fontWeight: 700 }}>{"\u2713"}</span>}
+                  {active && <span style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{"\u2713"}</span>}
                 </div>
-                <span style={{ fontFamily: "var(--m)", fontSize: "11px", color: active ? "#fff" : "#888", flex: 1 }}>{t}</span>
-                {count !== null && <span style={{ fontFamily: "var(--m)", fontSize: "10px", color: "#444" }}>{count}</span>}
+                <span style={{ fontFamily: "var(--m)", fontSize: "13px", color: active ? "#fff" : "#888", flex: 1 }}>{t}</span>
+                {count !== null && <span style={{ fontFamily: "var(--m)", fontSize: "12px", color: "#666" }}>{count}</span>}
               </label>
             );
           })}
@@ -853,7 +853,7 @@ function DropdownMulti({ label, selected, onChange, options, year, countFn }) {
           {selected.map(t => (
             <span key={t} onClick={() => toggle(t)} style={{
               background: "#1a0800", color: "#FF8A65", border: "1px solid #D5000044", padding: "2px 8px",
-              borderRadius: "2px", fontSize: "10px", fontFamily: "var(--m)", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px",
+              borderRadius: "2px", fontSize: "12px", fontFamily: "var(--m)", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px",
             }}>
               {t} <span style={{ color: "#D50000" }}>{"\u00D7"}</span>
             </span>
@@ -909,7 +909,7 @@ function BillLifecycle({ bill }) {
                   {isFail ? "\u{1F480}" : isVeto ? "\u274C" : stepData ? ICONS[n] : "\u25CB"}
                 </div>
               </Tooltip>
-              <div style={{ fontSize: "7px", textAlign: "center", marginTop: "4px", color: on ? "#aaa" : "#444", fontFamily: "var(--m)", lineHeight: 1.1, fontWeight: current ? 700 : 400, maxWidth: "60px" }}>{lbl}</div>
+              <div style={{ fontSize: "10px", textAlign: "center", marginTop: "4px", color: on ? "#aaa" : "#555", fontFamily: "var(--m)", lineHeight: 1.1, fontWeight: current ? 700 : 400, maxWidth: "60px" }}>{lbl}</div>
             </div>
           );
         })}
@@ -927,8 +927,8 @@ function EquityBadge({ proximity, direction }) {
   const dLabel = direction === "advances" ? "\u2191 Advances" : direction === "threatens" ? "\u2193 Threatens" : "\u2194 Mixed";
   return (
     <span style={{ display: "inline-flex", gap: "2px" }}>
-      <span style={{ background: pColor, color: "#fff", padding: "1px 6px", borderRadius: "2px 0 0 2px", fontSize: "8px", fontWeight: 700, fontFamily: "var(--m)", textTransform: "uppercase" }}>{proximity}</span>
-      <span style={{ background: dColor, color: direction === "mixed" ? "#000" : "#fff", padding: "1px 6px", borderRadius: "0 2px 2px 0", fontSize: "8px", fontWeight: 700, fontFamily: "var(--m)" }}>{dLabel}</span>
+      <span style={{ background: pColor, color: "#fff", padding: "2px 7px", borderRadius: "2px 0 0 2px", fontSize: "11px", fontWeight: 700, fontFamily: "var(--m)", textTransform: "uppercase" }}>{proximity}</span>
+      <span style={{ background: dColor, color: direction === "mixed" ? "#000" : "#fff", padding: "2px 7px", borderRadius: "0 2px 2px 0", fontSize: "11px", fontWeight: 700, fontFamily: "var(--m)" }}>{dLabel}</span>
     </span>
   );
 }
@@ -940,15 +940,15 @@ function BillListItem({ bill, onOpen, starred, onStar }) {
   const accent = bill.chamber === "Senate" ? "#D50000" : "#F9A825";
   const statusColor = bill.status === "Signed into Law" ? "#00E676" : bill.status === "Vetoed" ? "#FF1744" : bill.status.includes("Failed") ? "#FF6D00" : "#F9A825";
   return (
-    <div onClick={onOpen} style={{ background: "#0c0c0c", border: "1px solid #181818", borderLeft: `3px solid ${accent}`, padding: "10px 14px", cursor: "pointer", transition: "background 0.12s", marginBottom: "1px", display: "flex", alignItems: "center", gap: "10px" }}
+    <div onClick={onOpen} style={{ background: "#0c0c0c", border: "1px solid #181818", borderLeft: `3px solid ${accent}`, padding: "14px 18px", cursor: "pointer", transition: "background 0.12s", marginBottom: "1px", display: "flex", alignItems: "center", gap: "12px" }}
       onMouseEnter={e => e.currentTarget.style.background = "#131313"} onMouseLeave={e => e.currentTarget.style.background = "#0c0c0c"}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap", marginBottom: "3px" }}>
-          <span style={{ fontFamily: "var(--m)", fontWeight: 700, fontSize: "13px", color: accent }}>{bill.number}</span>
-          <span style={{ fontFamily: "var(--s)", fontSize: "14px", fontWeight: 600, color: "#ddd" }}>{bill.title}</span>
+          <span style={{ fontFamily: "var(--m)", fontWeight: 700, fontSize: "14px", color: accent }}>{bill.number}</span>
+          <span style={{ fontFamily: "var(--s)", fontSize: "16px", fontWeight: 600, color: "#eee" }}>{bill.title}</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "6px", flexWrap: "wrap" }}>
-          <span style={{ fontSize: "11px", color: "#999", fontFamily: "var(--m)" }}>{bill.author} <span style={{ color: bill.authorParty === "D" ? "#42A5F5" : "#EF5350", fontWeight: 700 }}>({bill.authorParty})</span></span>
+          <span style={{ fontSize: "13px", color: "#aaa", fontFamily: "var(--m)" }}>{bill.author} <span style={{ color: bill.authorParty === "D" ? "#42A5F5" : "#EF5350", fontWeight: 700 }}>({bill.authorParty})</span></span>
           <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: statusColor, flexShrink: 0 }} />
           <EquityBadge proximity={bill.equityProximity} direction={bill.equityDirection} />
         </div>
@@ -977,7 +977,7 @@ function BillModal({ bill, onClose, starred, onStar, admin }) {
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px", flexWrap: "wrap" }}>
               <span style={{ fontFamily: "var(--m)", fontWeight: 700, fontSize: "16px", color: accent }}>{bill.number}</span>
-              <span style={{ background: accent, color: bill.chamber === "Senate" ? "#fff" : "#000", padding: "2px 8px", borderRadius: "2px", fontSize: "9px", fontWeight: 700, fontFamily: "var(--m)", letterSpacing: "1px" }}>{bill.chamber === "Senate" ? "SEN" : "ASM"}</span>
+              <span style={{ background: accent, color: bill.chamber === "Senate" ? "#fff" : "#000", padding: "2px 8px", borderRadius: "2px", fontSize: "11px", fontWeight: 700, fontFamily: "var(--m)", letterSpacing: "1px" }}>{bill.chamber === "Senate" ? "SEN" : "ASM"}</span>
               <EquityBadge proximity={bill.equityProximity} direction={bill.equityDirection} />
               {admin && (
                 <span style={{ display: "inline-flex", gap: "4px", marginLeft: "4px" }}>
@@ -998,13 +998,13 @@ function BillModal({ bill, onClose, starred, onStar, admin }) {
           </div>
         </div>
 
-        <div style={{ fontSize: "12px", color: "#999", fontFamily: "var(--m)", marginBottom: "14px" }}>
-          <span style={{ color: "#ccc" }}>{bill.author}</span>
+        <div style={{ fontSize: "13px", color: "#aaa", fontFamily: "var(--m)", marginBottom: "14px" }}>
+          <span style={{ color: "#ddd" }}>{bill.author}</span>
           <span style={{ color: bill.authorParty === "D" ? "#42A5F5" : "#EF5350", fontWeight: 700, marginLeft: "4px" }}>({bill.authorParty})</span>
-          <span style={{ color: "#555", marginLeft: "6px" }}>{bill.authorDistrict} {"\u00B7"} {bill.authorRegion}</span>
+          <span style={{ color: "#777", marginLeft: "6px" }}>{bill.authorDistrict} {"\u00B7"} {bill.authorRegion}</span>
         </div>
 
-        <div style={{ fontSize: "10px", fontWeight: 700, fontFamily: "var(--m)", color: bill.status === "Signed into Law" ? "#00E676" : bill.status === "Vetoed" ? "#FF1744" : bill.status.includes("Failed") ? "#FF6D00" : "#F9A825", marginBottom: "12px" }}>
+        <div style={{ fontSize: "12px", fontWeight: 700, fontFamily: "var(--m)", color: bill.status === "Signed into Law" ? "#00E676" : bill.status === "Vetoed" ? "#FF1744" : bill.status.includes("Failed") ? "#FF6D00" : "#F9A825", marginBottom: "12px" }}>
           {bill.status.toUpperCase()} {"\u00B7"} {bill.lastActionText}
         </div>
 
@@ -1015,13 +1015,13 @@ function BillModal({ bill, onClose, starred, onStar, admin }) {
         )}
 
         <div style={{ background: "#0f0600", border: "1px solid #D5000030", padding: "12px 14px", marginBottom: "16px" }}>
-          <div style={{ fontSize: "9px", fontWeight: 700, color: "#D50000", fontFamily: "var(--m)", marginBottom: "6px", letterSpacing: "1px" }}>
+          <div style={{ fontSize: "11px", fontWeight: 700, color: "#D50000", fontFamily: "var(--m)", marginBottom: "6px", letterSpacing: "1px" }}>
             {"\uD83D\uDD0D"} AI-ASSESSED EQUITY ANALYSIS {"\u00B7"} {(bill.equityProximity || "").toUpperCase()} {"\u00B7"} {(bill.equityDirection || "").toUpperCase()}
           </div>
           {admin ? (
-            <Editable admin={admin} id={`${bill.id}_rationale`} multiline style={{ color: "#FFAB91", fontSize: "12px", lineHeight: 1.55, fontFamily: "var(--b)", fontStyle: "italic" }}>{bill.equityRationale}</Editable>
+            <Editable admin={admin} id={`${bill.id}_rationale`} multiline style={{ color: "#FFAB91", fontSize: "14px", lineHeight: 1.55, fontFamily: "var(--b)", fontStyle: "italic" }}>{bill.equityRationale}</Editable>
           ) : (
-            <p style={{ color: "#FFAB91", fontSize: "12px", lineHeight: 1.55, margin: 0, fontFamily: "var(--b)", fontStyle: "italic" }}>{bill.equityRationale}</p>
+            <p style={{ color: "#FFAB91", fontSize: "14px", lineHeight: 1.55, margin: 0, fontFamily: "var(--b)", fontStyle: "italic" }}>{bill.equityRationale}</p>
           )}
         </div>
 
@@ -1038,15 +1038,15 @@ function BillModal({ bill, onClose, starred, onStar, admin }) {
           {bill.lgbtq && <Chip label="LGBTQ+" color={COLORS["LGBTQ+"]} />}
           {bill.disability && <Chip label="Disability" color={COLORS["Disability"]} />}
           {bill.workingClass && <Chip label="Working-class" color={COLORS["Working-class"]} />}
-          {bill.topics.map(t => <span key={t} style={{ background: "#141414", color: "#666", padding: "2px 6px", borderRadius: "2px", fontSize: "9px", fontFamily: "var(--m)", border: "1px solid #1e1e1e" }}>{t}</span>)}
+          {bill.topics.map(t => <span key={t} style={{ background: "#141414", color: "#888", padding: "3px 8px", borderRadius: "2px", fontSize: "12px", fontFamily: "var(--m)", border: "1px solid #1e1e1e" }}>{t}</span>)}
         </div>
 
-        <div style={{ fontSize: "9px", fontWeight: 700, color: "#555", fontFamily: "var(--m)", marginBottom: "2px", letterSpacing: "1px" }}>BILL LIFECYCLE {"\u00B7"} HOVER FOR DETAILS</div>
+        <div style={{ fontSize: "11px", fontWeight: 700, color: "#777", fontFamily: "var(--m)", marginBottom: "2px", letterSpacing: "1px" }}>BILL LIFECYCLE {"\u00B7"} HOVER FOR DETAILS</div>
         <BillLifecycle bill={bill} />
 
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "6px", marginTop: "8px" }}>
-          <span style={{ fontSize: "10px", color: "#555", fontFamily: "var(--m)" }}>{bill.lastAction}</span>
-          <a href={bill.url} target="_blank" rel="noopener noreferrer" style={{ color: "#D50000", fontSize: "11px", fontFamily: "var(--m)", fontWeight: 700, textDecoration: "none" }}>FULL TEXT ON LEGINFO {"\u2192"}</a>
+          <span style={{ fontSize: "12px", color: "#777", fontFamily: "var(--m)" }}>{bill.lastAction}</span>
+          <a href={bill.url} target="_blank" rel="noopener noreferrer" style={{ color: "#D50000", fontSize: "13px", fontFamily: "var(--m)", fontWeight: 700, textDecoration: "none" }}>FULL TEXT ON LEGINFO {"\u2192"}</a>
         </div>
       </div>
     </div>
@@ -1061,41 +1061,41 @@ function Sacramento101({ admin }) {
   return (
     <div>
       <h2 style={{ fontFamily: "var(--s)", fontSize: "24px", fontWeight: 800, color: "#fff", margin: "0 0 6px 0" }}>Sacramento 101</h2>
-      <p style={{ color: "#666", fontSize: "12px", fontFamily: "var(--m)", marginBottom: "16px" }}>How California's legislature works, and where equity bills live and die.</p>
+      <p style={{ color: "#888", fontSize: "14px", fontFamily: "var(--m)", marginBottom: "16px" }}>How California's legislature works, and where equity bills live and die.</p>
 
       <Editable admin={admin} id="sac101_basics" multiline>
       <div style={{ background: "#0c0c0c", border: "1px solid #181818", padding: "16px", marginBottom: "10px" }}>
-        <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "10px" }}>THE BASICS</h3>
-        <div style={{ color: "#aaa", fontSize: "13px", fontFamily: "var(--b)", lineHeight: 1.8 }}>
+        <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "13px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "10px" }}>THE BASICS</h3>
+        <div style={{ color: "#aaa", fontSize: "15px", fontFamily: "var(--b)", lineHeight: 1.8 }}>
           <p style={{ marginTop: 0 }}>California has a <strong style={{ color: "#fff" }}>bicameral legislature</strong>: 40 Senators, 80 Assembly Members. Sessions span two years — the current session runs <strong style={{ color: "#F9A825" }}>2025 through 2026</strong>. This tracker covers all <strong style={{ color: "#F9A825" }}>4,863 bills</strong> introduced across both years of the session. In Year 1 alone (2025), legislators introduced roughly <strong style={{ color: "#F9A825" }}>2,500 bills</strong>. Of those, about <strong style={{ color: "#fff" }}>41%</strong> reached the Governor's desk. Governor Newsom signed <strong style={{ color: "#00E676" }}>roughly 87%</strong> of what reached him and vetoed <strong style={{ color: "#FF1744" }}>about 13%</strong>. That means roughly <strong style={{ color: "#FF6D00" }}>59% of all introduced bills died before ever reaching the Governor</strong>, most of them killed quietly in committee or on the suspense file. The Year 2 (2026) session is currently ongoing. Sources: <a href="https://calmatters.org" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>CalMatters</a>, <a href="https://capitolweekly.net" target="_blank" rel="noopener noreferrer" style={{ color: "#D50000" }}>Capitol Weekly</a>.</p>
         </div>
       </div>
       </Editable>
 
       <div style={{ background: "#0c0c0c", border: "1px solid #181818", padding: "16px", marginBottom: "10px" }}>
-        <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "12px" }}>THE JOURNEY: HOW A BILL BECOMES LAW</h3>
+        <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "13px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "12px" }}>THE JOURNEY: HOW A BILL BECOMES LAW</h3>
 
         <div style={{ display: "flex", gap: "12px", marginBottom: "16px", alignItems: "flex-start" }}>
           <div style={{ width: "34px", height: "34px", borderRadius: "50%", background: "#D50000", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", flexShrink: 0 }}>{"\u{1F4CB}"}</div>
           <div>
-            <div style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "11px", fontWeight: 700 }}>STEP 1: INTRODUCTION</div>
-            <div style={{ color: "#aaa", fontSize: "12px", fontFamily: "var(--b)", lineHeight: 1.6 }}>A legislator authors a bill, which receives a number: AB (Assembly Bill) or SB (Senate Bill). It gets a first reading on the floor and is assigned to a policy committee based on its subject matter. Any member of the public can read the bill text on leginfo.legislature.ca.gov from this point forward.</div>
+            <div style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "13px", fontWeight: 700 }}>STEP 1: INTRODUCTION</div>
+            <div style={{ color: "#aaa", fontSize: "14px", fontFamily: "var(--b)", lineHeight: 1.6 }}>A legislator authors a bill, which receives a number: AB (Assembly Bill) or SB (Senate Bill). It gets a first reading on the floor and is assigned to a policy committee based on its subject matter. Any member of the public can read the bill text on leginfo.legislature.ca.gov from this point forward.</div>
           </div>
         </div>
 
         <div style={{ display: "flex", gap: "12px", marginBottom: "16px", alignItems: "flex-start" }}>
           <div style={{ width: "34px", height: "34px", borderRadius: "50%", background: "#D50000", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", flexShrink: 0 }}>{"\u{1F3DB}\uFE0F"}</div>
           <div>
-            <div style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "11px", fontWeight: 700 }}>STEP 2: POLICY COMMITTEE</div>
-            <div style={{ color: "#aaa", fontSize: "12px", fontFamily: "var(--b)", lineHeight: 1.6 }}>This is the first major hurdle, and where most bills die. The bill is heard by a policy committee (for example, the Senate Public Safety Committee or the Assembly Education Committee) that specializes in the bill's subject area. The committee process has several parts: first, the bill author presents the bill and its purpose. Then there is a public hearing where supporters and opponents testify, either in person at the Capitol, by phone, or in writing. Lobbyists, advocacy organizations, government agencies, and members of the public all weigh in. After testimony, committee members discuss the bill and vote. A bill needs a majority of the committee's members to advance. The committee chair has significant power to schedule or delay hearings. If a bill is never scheduled for a hearing, it dies without a vote. Of the roughly 2,250 bills introduced in 2025, most never made it past this stage.</div>
+            <div style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "13px", fontWeight: 700 }}>STEP 2: POLICY COMMITTEE</div>
+            <div style={{ color: "#aaa", fontSize: "14px", fontFamily: "var(--b)", lineHeight: 1.6 }}>This is the first major hurdle, and where most bills die. The bill is heard by a policy committee (for example, the Senate Public Safety Committee or the Assembly Education Committee) that specializes in the bill's subject area. The committee process has several parts: first, the bill author presents the bill and its purpose. Then there is a public hearing where supporters and opponents testify, either in person at the Capitol, by phone, or in writing. Lobbyists, advocacy organizations, government agencies, and members of the public all weigh in. After testimony, committee members discuss the bill and vote. A bill needs a majority of the committee's members to advance. The committee chair has significant power to schedule or delay hearings. If a bill is never scheduled for a hearing, it dies without a vote. Of the roughly 2,250 bills introduced in 2025, most never made it past this stage.</div>
           </div>
         </div>
 
         <div style={{ display: "flex", gap: "12px", marginBottom: "16px", alignItems: "flex-start" }}>
           <div style={{ width: "34px", height: "34px", borderRadius: "50%", background: "#D50000", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", flexShrink: 0 }}>{"\u{1F4B0}"}</div>
           <div>
-            <div style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "11px", fontWeight: 700 }}>STEP 3: APPROPRIATIONS & THE SUSPENSE FILE</div>
-            <div style={{ color: "#aaa", fontSize: "12px", fontFamily: "var(--b)", lineHeight: 1.6 }}>If a bill costs money, it gets sent to the Appropriations Committee. Bills with costs above $150,000 (Assembly) or $50,000 (Senate) are placed on what is called the "suspense file." The suspense file is one of the most powerful and least transparent mechanisms in the entire legislative process. Hundreds of bills pile up on it. Then, twice a year, in late May and late August, the Appropriations Committee chair goes through the entire list and announces which bills will advance and which will die. This happens rapidly, often with minimal public debate. In 2025, the Assembly Appropriations Committee killed roughly 35% of the 666 bills on its May suspense file. Of the 2,403 bills that died during the previous two-year session (2023-2024), only 25 were killed by an actual recorded "no" vote on the floor. The rest died behind closed doors, many of them on the suspense file. This is the equity story: bills do not die because legislators publicly vote against them. They die because a single committee chair, behind closed doors, decides the state cannot afford them. And "too expensive" is often a political judgment, not purely a fiscal one.</div>
+            <div style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "13px", fontWeight: 700 }}>STEP 3: APPROPRIATIONS & THE SUSPENSE FILE</div>
+            <div style={{ color: "#aaa", fontSize: "14px", fontFamily: "var(--b)", lineHeight: 1.6 }}>If a bill costs money, it gets sent to the Appropriations Committee. Bills with costs above $150,000 (Assembly) or $50,000 (Senate) are placed on what is called the "suspense file." The suspense file is one of the most powerful and least transparent mechanisms in the entire legislative process. Hundreds of bills pile up on it. Then, twice a year, in late May and late August, the Appropriations Committee chair goes through the entire list and announces which bills will advance and which will die. This happens rapidly, often with minimal public debate. In 2025, the Assembly Appropriations Committee killed roughly 35% of the 666 bills on its May suspense file. Of the 2,403 bills that died during the previous two-year session (2023-2024), only 25 were killed by an actual recorded "no" vote on the floor. The rest died behind closed doors, many of them on the suspense file. This is the equity story: bills do not die because legislators publicly vote against them. They die because a single committee chair, behind closed doors, decides the state cannot afford them. And "too expensive" is often a political judgment, not purely a fiscal one.</div>
           </div>
         </div>
 
@@ -1107,14 +1107,14 @@ function Sacramento101({ admin }) {
         ].map(s => (
           <div key={s.s} style={{ display: "flex", gap: "12px", marginBottom: "16px", alignItems: "flex-start" }}>
             <div style={{ width: "34px", height: "34px", borderRadius: "50%", background: "#D50000", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px", flexShrink: 0 }}>{s.i}</div>
-            <div><div style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "11px", fontWeight: 700 }}>STEP {s.s}: {s.t.toUpperCase()}</div><div style={{ color: "#aaa", fontSize: "12px", fontFamily: "var(--b)", lineHeight: 1.6 }}>{s.d}</div></div>
+            <div><div style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "13px", fontWeight: 700 }}>STEP {s.s}: {s.t.toUpperCase()}</div><div style={{ color: "#aaa", fontSize: "14px", fontFamily: "var(--b)", lineHeight: 1.6 }}>{s.d}</div></div>
           </div>
         ))}
       </div>
 
       <div style={{ background: "#0c0c0c", border: "1px solid #181818", padding: "16px", marginBottom: "10px" }}>
-        <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "8px" }}>KEY DATES 2025-2026</h3>
-        <p style={{ color: "#555", fontSize: "11px", fontFamily: "var(--m)", marginTop: 0, marginBottom: "10px" }}>Hover over any date for more detail on what it means and why it matters.</p>
+        <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "13px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "8px" }}>KEY DATES 2025-2026</h3>
+        <p style={{ color: "#888", fontSize: "12px", fontFamily: "var(--m)", marginTop: 0, marginBottom: "10px" }}>Hover over any date for more detail on what it means and why it matters.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "8px" }}>
           {[
             ["Jan 6, 2025", "Session convenes ✓", "The two-year legislative session officially began. Legislators were sworn in and began introducing bills. California's legislature meets year-round, unlike many other states."],
@@ -1130,8 +1130,8 @@ function Sacramento101({ admin }) {
           ].map(([d, e, tip]) => (
             <Tooltip key={d} text={tip}>
               <div style={{ display: "flex", gap: "8px", cursor: "help", padding: "4px 0" }}>
-                <span style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "10px", fontWeight: 700, minWidth: "110px" }}>{d}</span>
-                <span style={{ color: "#aaa", fontSize: "11px", fontFamily: "var(--b)", borderBottom: "1px dotted #444" }}>{e}</span>
+                <span style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "12px", fontWeight: 700, minWidth: "120px" }}>{d}</span>
+                <span style={{ color: "#aaa", fontSize: "13px", fontFamily: "var(--b)", borderBottom: "1px dotted #444" }}>{e}</span>
               </div>
             </Tooltip>
           ))}
@@ -1151,12 +1151,12 @@ function AboutPage({ admin }) {
   const Section = ({ id, title, children }) => (
     <div style={{ background: "#0c0c0c", border: "1px solid #181818", marginBottom: "6px" }}>
       <button onClick={() => toggle(id)} style={{ width: "100%", background: "none", border: "none", padding: "12px 16px", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", color: "#fff" }}>
-        <span style={{ fontFamily: "var(--m)", fontSize: "11px", fontWeight: 700, letterSpacing: "1px", color: "#D50000" }}>{title}</span>
+        <span style={{ fontFamily: "var(--m)", fontSize: "13px", fontWeight: 700, letterSpacing: "1px", color: "#D50000" }}>{title}</span>
         <span style={{ fontFamily: "var(--m)", fontSize: "12px", color: "#555" }}>{openSection === id ? "\u25B2" : "\u25BC"}</span>
       </button>
       {openSection === id && (
         <Editable admin={admin} id={`about_${id}`} multiline>
-          <div style={{ padding: "0 16px 16px", color: "#aaa", fontSize: "13px", fontFamily: "var(--b)", lineHeight: 1.7 }}>{children}</div>
+          <div style={{ padding: "0 16px 16px", color: "#aaa", fontSize: "15px", fontFamily: "var(--b)", lineHeight: 1.7 }}>{children}</div>
         </Editable>
       )}
     </div>
@@ -1169,7 +1169,7 @@ function AboutPage({ admin }) {
   return (
     <div>
       <h2 style={{ fontFamily: "var(--s)", fontSize: "24px", fontWeight: 800, color: "#fff", margin: "0 0 6px 0" }}>About This Tracker</h2>
-      <p style={{ color: "#666", fontSize: "12px", fontFamily: "var(--m)", marginBottom: "16px" }}>Methodology, framework, and the humans behind the data.</p>
+      <p style={{ color: "#888", fontSize: "14px", fontFamily: "var(--m)", marginBottom: "16px" }}>Methodology, framework, and the humans behind the data.</p>
 
       <Section id="method" title="METHODOLOGY">
         <p>This tracker uses a two-layer architecture that separates facts from analysis — a deliberate design choice to eliminate the hallucinations that plagued earlier AI-only approaches.</p>
@@ -1514,7 +1514,7 @@ export default function App() {
     if (sortBy === "number") b.sort((a, c) => dir * a.number.localeCompare(c.number, undefined, { numeric: true }));
     else if (sortBy === "name") b.sort((a, c) => dir * a.title.localeCompare(c.title));
     return b;
-  }, [year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, statusF, authorF, sortBy, sortDir, showStarred, starredIds]);
+  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, statusF, authorF, sortBy, sortDir, showStarred, starredIds]);
 
   const clearAll = () => { setSearch(""); setChamber("all"); setPartyF("all"); setRaceF([]); setGenderF(false); setLgbtqF(false); setDisabilityF(false); setWorkingF(false); setProximityF([]); setDirectionF([]); setTopicF([]); setStatusF([]); setAuthorF([]); setShowStarred(false); };
   const anyF = search || chamber !== "all" || partyF !== "all" || raceF.length || genderF || lgbtqF || disabilityF || workingF || proximityF.length || directionF.length || topicF.length || statusF.length || authorF.length || showStarred;
@@ -1560,11 +1560,11 @@ export default function App() {
          view === "about" ? <AboutPage admin={admin} /> :
           false ? null : (
             <>
-              <input type="text" placeholder="Search by keyword, author, bill #..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: "100%", padding: "9px 12px", background: "#0c0c0c", border: "1px solid #1e1e1e", color: "#fff", fontSize: "12px", fontFamily: "var(--m)", outline: "none", marginBottom: "10px" }} />
+              <input type="text" placeholder="Search by keyword, author, bill #..." value={search} onChange={e => setSearch(e.target.value)} style={{ width: "100%", padding: "10px 14px", background: "#0c0c0c", border: "1px solid #1e1e1e", color: "#fff", fontSize: "14px", fontFamily: "var(--m)", outline: "none", marginBottom: "10px" }} />
 
               <div style={{ background: "#0a0a0a", border: "1px solid #151515", padding: "12px", marginBottom: "10px" }}>
                 <div style={{ marginBottom: "8px" }}>
-                  <div style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#444", letterSpacing: "1px", fontWeight: 700, marginBottom: "4px" }}>CHAMBER & PARTY</div>
+                  <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>CHAMBER & PARTY</div>
                   <div style={{ display: "flex", gap: "3px", flexWrap: "wrap", alignItems: "center" }}>
                     {[["all", "All"], ["assembly", "Assembly"], ["senate", "Senate"]].map(([v, l]) => <FilterBtn key={v} label={l} active={chamber === v} onClick={() => setChamber(v)} />)}
                     <span style={{ width: "1px", height: "20px", background: "#2a2a2a", margin: "0 4px" }} />
@@ -1573,7 +1573,7 @@ export default function App() {
                 </div>
 
                 <div style={{ marginBottom: "8px" }}>
-                  <div style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#444", letterSpacing: "1px", fontWeight: 700, marginBottom: "4px" }}>IDENTITY</div>
+                  <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>IDENTITY</div>
                   <div style={{ display: "flex", gap: "3px", flexWrap: "wrap", alignItems: "center" }}>
                     {RACE_TAGS.map(t => <FilterBtn key={t} label={t} active={raceF.includes(t)} onClick={() => tog(raceF, setRaceF, t)} color={COLORS[t]} />)}
                     <span style={{ width: "1px", height: "20px", background: "#2a2a2a", margin: "0 3px" }} />
@@ -1582,7 +1582,7 @@ export default function App() {
                 </div>
 
                 <div style={{ marginBottom: "8px" }}>
-                  <div style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#444", letterSpacing: "1px", fontWeight: 700, marginBottom: "4px" }}>EQUITY LENS</div>
+                  <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>EQUITY LENS</div>
                   <div style={{ display: "flex", gap: "3px", flexWrap: "wrap", alignItems: "center" }}>
                     {Object.entries(EQUITY_PROXIMITY).map(([k, v]) => <FilterBtn key={k} label={v} active={proximityF.includes(k)} onClick={() => tog(proximityF, setProximityF, k)} color={COLORS[k]} />)}
                     <span style={{ width: "1px", height: "20px", background: "#2a2a2a", margin: "0 3px" }} />
@@ -1592,32 +1592,32 @@ export default function App() {
 
                 <div style={{ marginBottom: "8px", display: "flex", gap: "8px", flexWrap: "wrap", alignItems: "flex-start" }}>
                   <div>
-                    <div style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#444", letterSpacing: "1px", fontWeight: 700, marginBottom: "4px" }}>POLICY AREA</div>
+                    <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>POLICY AREA</div>
                     <DropdownMulti label="Policy Areas" selected={topicF} onChange={setTopicF} options={ALL_TOPICS} year={year} countFn={t => bills.filter(b => b.topics.includes(t) && b.year === year).length} />
                   </div>
                   <div>
-                    <div style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#444", letterSpacing: "1px", fontWeight: 700, marginBottom: "4px" }}>SPONSOR</div>
+                    <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>SPONSOR</div>
                     <DropdownMulti label="Bill Sponsor" selected={authorF} onChange={setAuthorF} options={ALL_AUTHORS} year={year} countFn={a => bills.filter(b => b.author === a && b.year === year).length} />
                   </div>
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "8px", borderTop: "1px solid #151515", paddingTop: "8px", flexWrap: "wrap", gap: "4px" }}>
                   <div style={{ display: "flex", gap: "4px", alignItems: "center" }}>
-                    <span style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#444", letterSpacing: "1px", fontWeight: 700 }}>SORT:</span>
+                    <span style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700 }}>SORT:</span>
                     <FilterBtn label={`Bill # ${sortBy === "number" ? (sortDir === "asc" ? "\u2191" : "\u2193") : ""}`} active={sortBy === "number"} onClick={() => toggleSort("number")} />
                     <FilterBtn label={`Name ${sortBy === "name" ? (sortDir === "asc" ? "A-Z" : "Z-A") : ""}`} active={sortBy === "name"} onClick={() => toggleSort("name")} />
                     <span style={{ width: "1px", height: "20px", background: "#2a2a2a", margin: "0 4px" }} />
                     <div style={{ position: "relative" }}>
                       <FilterBtn label={`\u2605 Starred${starredIds.length ? ` (${starredIds.length})` : ""}`} active={showStarred} onClick={() => setShowStarred(p => !p)} color="#F9A825" />
                       {starTooltip && starredIds.length === 0 && (
-                        <div style={{ position: "absolute", top: "-36px", left: "50%", transform: "translateX(-50%)", background: "#1a1a1a", border: "1px solid #F9A825", padding: "4px 10px", borderRadius: "3px", fontSize: "10px", color: "#F9A825", fontFamily: "var(--m)", whiteSpace: "nowrap", zIndex: 60, pointerEvents: "none" }}>
+                        <div style={{ position: "absolute", top: "-36px", left: "50%", transform: "translateX(-50%)", background: "#1a1a1a", border: "1px solid #F9A825", padding: "4px 10px", borderRadius: "3px", fontSize: "12px", color: "#F9A825", fontFamily: "var(--m)", whiteSpace: "nowrap", zIndex: 60, pointerEvents: "none" }}>
                           Star bills to build your watchlist
                           <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", width: 0, height: 0, borderLeft: "5px solid transparent", borderRight: "5px solid transparent", borderTop: "5px solid #F9A825" }} />
                         </div>
                       )}
                     </div>
                   </div>
-                  {anyF && <button onClick={clearAll} style={{ background: "transparent", color: "#D50000", border: "1px solid #D5000055", padding: "3px 8px", fontFamily: "var(--m)", fontSize: "8px", fontWeight: 700, cursor: "pointer" }}>CLEAR ALL</button>}
+                  {anyF && <button onClick={clearAll} style={{ background: "transparent", color: "#D50000", border: "1px solid #D5000055", padding: "4px 10px", fontFamily: "var(--m)", fontSize: "11px", fontWeight: 700, cursor: "pointer" }}>CLEAR ALL</button>}
                 </div>
               </div>
 
@@ -1637,13 +1637,13 @@ export default function App() {
                     <div key={s.l} onClick={s.status ? () => statFilter(s.status) : undefined} style={{
                       background: isActive ? `${s.c}15` : "#0c0c0c",
                       border: isActive ? `1px solid ${s.c}44` : "1px solid #181818",
-                      padding: "7px 4px", flex: 1, textAlign: "center",
+                      padding: "9px 4px", flex: 1, textAlign: "center",
                       cursor: s.status ? "pointer" : "default", transition: "all 0.12s",
                     }}
                       onMouseEnter={e => { if (s.status) e.currentTarget.style.background = isActive ? `${s.c}20` : "#151515"; }}
                       onMouseLeave={e => { if (s.status) e.currentTarget.style.background = isActive ? `${s.c}15` : "#0c0c0c"; }}>
                       <div style={{ fontFamily: "var(--m)", fontSize: "20px", fontWeight: 700, color: s.status === null ? "#fff" : (isActive ? s.c : `${s.c}88`) }}>{s.status === null ? filtered.length : count}</div>
-                      <div style={{ fontFamily: "var(--m)", fontSize: "7px", color: isActive ? s.c : "#444", letterSpacing: "0.5px", fontWeight: isActive ? 700 : 400, lineHeight: 1.3 }}>{s.l}<br/><span style={{ fontSize: "6px", letterSpacing: "0.3px" }}>{s.sub}</span></div>
+                      <div style={{ fontFamily: "var(--m)", fontSize: "10px", color: isActive ? s.c : "#666", letterSpacing: "0.5px", fontWeight: isActive ? 700 : 400, lineHeight: 1.3 }}>{s.l}<br/><span style={{ fontSize: "9px", letterSpacing: "0.3px" }}>{s.sub}</span></div>
                     </div>
                   );
                 })}
@@ -1665,7 +1665,7 @@ export default function App() {
               ))}
 
               <div style={{ marginTop: "16px", padding: "12px", borderTop: "1px solid #151515", textAlign: "center" }}>
-                <div style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#2a2a2a", letterSpacing: "0.5px", lineHeight: 1.8 }}>
+                <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#444", letterSpacing: "0.5px", lineHeight: 1.8 }}>
                   {"\u26A0\uFE0F"} EQUITY CLASSIFICATIONS ARE AI-ASSESSED {"\u00B7"} DESIGNED TO BE CRITICALLY EXAMINED<br />
                   Bill metadata: leginfo.legislature.ca.gov {"\u00B7"} Not affiliated with State of California<br />
                   Authors verified Feb 2026 {"\u00B7"} Built for students & advocates
