@@ -10,8 +10,9 @@ out/
 .env.local
 .env.*.local
 
-# Pipeline (Python scripts + data processing — not needed for website)
-pipeline/
+# Pipeline data/cache (not the scripts themselves)
+pipeline/__pycache__/
+pipeline/*.pyc
 
 # Extra JSON at project root (the real file lives in public/)
 /ca_equity_bills_2025.json

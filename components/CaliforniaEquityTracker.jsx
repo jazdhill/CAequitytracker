@@ -676,7 +676,13 @@ function normalizeBill(bill) {
     authorParty: primarySponsor.party || "?",
     authorDistrict: "",
     authorRegion: "",
-    summary: bill.description || bill.title || "",
+    summary: (() => {
+      // Priority: AI-generated plain summary > "relating to X" extract > raw description
+      if (eq.summary) return eq.summary;
+      const m = (bill.description || "").match(/(?:,\s*|An act\s+)relating to ([^,\.]+)/i);
+      if (m) return m[1].trim().replace(/^\w/, c => c.toUpperCase());
+      return bill.description || bill.title || "";
+    })(),
     topics,
     status,
     dateIntroduced: lc.introduced_date || "",
