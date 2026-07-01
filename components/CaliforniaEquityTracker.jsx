@@ -625,7 +625,8 @@ function normalizeBill(bill) {
     "EQUITY RELEVANT": "structural",
   };
   const equityProximity = proximityMap[eq.classification] || null;
-  const equityDirection = equityProximity ? "advances" : null;
+  const VALID_DIRECTIONS = ["advances", "threatens", "mixed"];
+  const equityDirection = VALID_DIRECTIONS.includes(eq.direction) ? eq.direction : null;
 
   // Normalize population names — match by keyword within the string
   const POP_RULES = [
@@ -933,12 +934,12 @@ function BillLifecycle({ bill }) {
 // ============================================================
 function EquityBadge({ proximity, direction }) {
   const pColor = proximity === "explicit" ? "#D50000" : "#E65100";
-  const dColor = direction === "advances" ? "#00C853" : direction === "threatens" ? "#FF1744" : "#F9A825";
-  const dLabel = direction === "advances" ? "\u2191 Advances" : direction === "threatens" ? "\u2193 Threatens" : "\u2194 Mixed";
+  const dColor = direction === "advances" ? "#00C853" : direction === "threatens" ? "#FF1744" : direction === "mixed" ? "#F9A825" : "#2a2a2a";
+  const dLabel = direction === "advances" ? "\u2191 Advances" : direction === "threatens" ? "\u2193 Threatens" : direction === "mixed" ? "\u2194 Mixed" : "Analyzing\u2026";
   return (
     <span style={{ display: "inline-flex", gap: "2px" }}>
       <span style={{ background: pColor, color: "#fff", padding: "2px 7px", borderRadius: "2px 0 0 2px", fontSize: "11px", fontWeight: 700, fontFamily: "var(--m)", textTransform: "uppercase" }}>{proximity}</span>
-      <span style={{ background: dColor, color: direction === "mixed" ? "#000" : "#fff", padding: "2px 7px", borderRadius: "0 2px 2px 0", fontSize: "11px", fontWeight: 700, fontFamily: "var(--m)" }}>{dLabel}</span>
+      <span style={{ background: dColor, color: direction === "mixed" ? "#000" : direction ? "#fff" : "#777", padding: "2px 7px", borderRadius: "0 2px 2px 0", fontSize: "11px", fontWeight: 700, fontFamily: "var(--m)" }}>{dLabel}</span>
     </span>
   );
 }
