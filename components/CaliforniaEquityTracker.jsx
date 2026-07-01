@@ -1444,6 +1444,105 @@ function MiniToolbar({ admin }) {
 
 
 // ============================================================
+// FEEDBACK
+// ============================================================
+function FeedbackButton({ admin }) {
+  const [open, setOpen] = useState(false);
+  const [type, setType] = useState("Feedback");
+  const [billNumber, setBillNumber] = useState("");
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState(null); // null | "sending" | "sent" | "error"
+
+  const TYPES = ["Bug", "Feedback", "Reclassify equity framing"];
+
+  const reset = () => { setType("Feedback"); setBillNumber(""); setMessage(""); setStatus(null); };
+
+  const submit = async () => {
+    if (!message.trim()) return;
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type, billNumber, message, page: typeof window !== "undefined" ? window.location.href : "" }),
+      });
+      const data = await res.json();
+      if (data.ok) setStatus("sent");
+      else setStatus("error");
+    } catch {
+      setStatus("error");
+    }
+  };
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        style={{ position: "fixed", bottom: admin ? "100px" : "12px", right: "12px", zIndex: 9998, background: "#D50000", color: "#fff", border: "none", borderRadius: "999px", padding: "10px 16px", fontFamily: "var(--m)", fontWeight: 700, fontSize: "12px", cursor: "pointer", boxShadow: "0 4px 16px rgba(213,0,0,0.4)" }}
+      >
+        {"💬"} Feedback
+      </button>
+
+      {open && (
+        <div onClick={() => { setOpen(false); reset(); }} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(4px)", zIndex: 9999, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px" }}>
+          <div onClick={e => e.stopPropagation()} style={{ background: "#0c0c0c", border: "1px solid #222", borderTop: "3px solid #D50000", maxWidth: "440px", width: "100%", padding: "22px", position: "relative" }}>
+            <button onClick={() => { setOpen(false); reset(); }} style={{ position: "absolute", top: "12px", right: "12px", background: "#222", border: "none", color: "#888", width: "28px", height: "28px", cursor: "pointer", fontSize: "14px", fontFamily: "var(--m)", fontWeight: 700 }}>{"×"}</button>
+
+            {status === "sent" ? (
+              <div style={{ padding: "20px 0", textAlign: "center" }}>
+                <div style={{ fontSize: "28px", marginBottom: "10px" }}>{"✅"}</div>
+                <div style={{ color: "#fff", fontFamily: "var(--s)", fontSize: "17px", fontWeight: 700, marginBottom: "4px" }}>Thanks!</div>
+                <div style={{ color: "#888", fontSize: "13px", fontFamily: "var(--m)" }}>Your note was sent.</div>
+              </div>
+            ) : (
+              <>
+                <div style={{ color: "#fff", fontFamily: "var(--s)", fontSize: "18px", fontWeight: 700, marginBottom: "4px" }}>Send feedback</div>
+                <div style={{ color: "#888", fontSize: "12px", fontFamily: "var(--m)", marginBottom: "16px" }}>Bugs, ideas, or a bill you think is misclassified.</div>
+
+                <div style={{ display: "flex", gap: "6px", marginBottom: "12px", flexWrap: "wrap" }}>
+                  {TYPES.map(t => (
+                    <button key={t} onClick={() => setType(t)} style={{ background: type === t ? "#D50000" : "#111", color: type === t ? "#fff" : "#888", border: "1px solid #2a2a2a", padding: "6px 10px", fontFamily: "var(--m)", fontSize: "11px", fontWeight: 700, cursor: "pointer" }}>{t}</button>
+                  ))}
+                </div>
+
+                {type === "Reclassify equity framing" && (
+                  <input
+                    value={billNumber}
+                    onChange={e => setBillNumber(e.target.value)}
+                    placeholder="Bill # (e.g. AB 1234)"
+                    style={{ width: "100%", background: "#111", border: "1px solid #2a2a2a", color: "#fff", padding: "9px 10px", fontFamily: "var(--m)", fontSize: "13px", marginBottom: "10px" }}
+                  />
+                )}
+
+                <textarea
+                  value={message}
+                  onChange={e => setMessage(e.target.value)}
+                  placeholder={type === "Bug" ? "What happened, and what did you expect instead?" : type === "Reclassify equity framing" ? "Why do you think this bill's equity classification is wrong?" : "What's on your mind?"}
+                  rows={5}
+                  style={{ width: "100%", background: "#111", border: "1px solid #2a2a2a", color: "#fff", padding: "9px 10px", fontFamily: "var(--b)", fontSize: "13px", resize: "vertical", marginBottom: "12px" }}
+                />
+
+                {status === "error" && (
+                  <div style={{ color: "#FF6D00", fontSize: "12px", fontFamily: "var(--m)", marginBottom: "10px" }}>Couldn&rsquo;t send — please try again.</div>
+                )}
+
+                <button
+                  onClick={submit}
+                  disabled={!message.trim() || status === "sending"}
+                  style={{ width: "100%", background: !message.trim() ? "#333" : "#D50000", color: "#fff", border: "none", padding: "10px", fontFamily: "var(--m)", fontWeight: 700, fontSize: "13px", cursor: !message.trim() ? "default" : "pointer" }}
+                >
+                  {status === "sending" ? "Sending…" : "Submit"}
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+// ============================================================
 // MAIN APP
 // ============================================================
 export default function App() {
@@ -1705,6 +1804,7 @@ export default function App() {
       )}
       <AdminToolbar admin={admin} onToggle={toggleAdmin} />
       {admin && <MiniToolbar />}
+      <FeedbackButton admin={admin} />
     </div>
   );
 }
