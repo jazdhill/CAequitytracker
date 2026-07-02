@@ -586,6 +586,9 @@ const BILLS_DATA = [
 // ============================================================
 // DATA NORMALIZATION — maps pipeline JSON → component shape
 // ============================================================
+const todayISO = new Date().toISOString().slice(0, 10);
+const weekFromNowISO = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
+
 function normalizeBill(bill) {
   const rawNum = bill.bill_number || "";
   const number = rawNum.replace(/^([A-Za-z]+)\s*(\d+)$/, "$1 $2") || rawNum;
@@ -679,6 +682,7 @@ function normalizeBill(bill) {
 
   const sortedSteps = [...steps].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
   const lastStep = sortedSteps[0];
+  const upcomingHearings = (bill.calendar || []).filter(e => e.date >= todayISO);
 
   return {
     id: String(bill.bill_id || rawNum),
@@ -703,6 +707,11 @@ function normalizeBill(bill) {
     lastActionText: lastStep?.detail || "",
     stage: lastStep?.label || "Introduced",
     billType,
+    committee: bill.committee?.name
+      ? `${bill.committee.chamber === "S" ? "Senate" : "Assembly"} ${bill.committee.name}`
+      : "",
+    upcomingHearings,
+    hearingThisWeek: upcomingHearings.some(e => e.date <= weekFromNowISO),
     equityProximity,
     equityDirection,
     equityRationale: eq.rationale || "",
@@ -1033,8 +1042,18 @@ function BillModal({ bill, onClose, starred, onStar, admin }) {
         </div>
 
         <div style={{ fontSize: "12px", fontWeight: 700, fontFamily: "var(--m)", color: bill.status === "Signed into Law" ? "#00E676" : bill.status === "Vetoed" ? "#FF1744" : bill.status.includes("Failed") ? "#FF6D00" : "#F9A825", marginBottom: "12px" }}>
-          {bill.status.toUpperCase()} {"\u00B7"} {bill.lastActionText}
+          {bill.status.toUpperCase()} {"\u00B7"} {bill.lastActionText}{bill.committee && <> {"\u00B7"} Currently in: {bill.committee}</>}
         </div>
+
+        {bill.upcomingHearings?.length > 0 && (
+          <div style={{ background: "#001a0f", border: "1px solid #00C85340", padding: "10px 14px", marginBottom: "14px" }}>
+            {bill.upcomingHearings.map((h, i) => (
+              <div key={i} style={{ fontSize: "13px", color: "#00E676", fontFamily: "var(--m)", fontWeight: 700 }}>
+                {"\uD83D\uDCC5"} {h.description || h.type} \u2014 {h.date}{h.time && h.time !== "00:00" ? ` ${h.time}` : ""}{h.location ? ` \u00B7 ${h.location}` : ""}
+              </div>
+            ))}
+          </div>
+        )}
 
         {admin ? (
           <Editable admin={admin} id={`${bill.id}_summary`} multiline style={{ color: "#bbb", fontSize: "14px", lineHeight: 1.65, marginBottom: "14px", fontFamily: "var(--b)" }}>{bill.summary}</Editable>
@@ -1670,6 +1689,7 @@ export default function App() {
     const present = new Set(bills.map(b => b.billType));
     return BILL_TYPE_ORDER.filter(t => present.has(t));
   }, [bills]);
+  const ALL_COMMITTEES = useMemo(() => [...new Set(bills.map(b => b.committee).filter(Boolean))].sort(), [bills]);
   const [search, setSearch] = useState("");
   const [chamber, setChamber] = useState("all");
   const [partyF, setPartyF] = useState("all");
@@ -1685,6 +1705,8 @@ export default function App() {
   const [authorF, setAuthorF] = useState([]);
   const [stageF, setStageF] = useState([]);
   const [typeF, setTypeF] = useState([]);
+  const [committeeF, setCommitteeF] = useState([]);
+  const [hearingsF, setHearingsF] = useState(false);
   const [modalBill, setModalBill] = useState(null);
   const [sortBy, setSortBy] = useState("number");
   const [sortDir, setSortDir] = useState("asc");
@@ -1731,9 +1753,11 @@ export default function App() {
     if (authorF.length) b = b.filter(x => authorF.includes(x.author));
     if (stageF.length) b = b.filter(x => stageF.includes(x.stage));
     if (typeF.length) b = b.filter(x => typeF.includes(x.billType));
+    if (committeeF.length) b = b.filter(x => committeeF.includes(x.committee));
+    if (hearingsF) b = b.filter(x => x.hearingThisWeek);
     if (showStarred) b = b.filter(x => starredIds.includes(x.id));
     return b;
-  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, authorF, stageF, typeF, showStarred, starredIds]);
+  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, authorF, stageF, typeF, committeeF, hearingsF, showStarred, starredIds]);
 
   const filtered = useMemo(() => {
     let b = statusF.length ? filteredBase.filter(x => statusF.includes(x.status)) : filteredBase;
@@ -1745,8 +1769,8 @@ export default function App() {
     return b;
   }, [filteredBase, statusF, sortBy, sortDir]);
 
-  const clearAll = () => { setSearch(""); setChamber("all"); setPartyF("all"); setRaceF([]); setGenderF(false); setLgbtqF(false); setDisabilityF(false); setWorkingF(false); setProximityF([]); setDirectionF([]); setTopicF([]); setStatusF([]); setAuthorF([]); setStageF([]); setTypeF([]); setShowStarred(false); };
-  const anyF = search || chamber !== "all" || partyF !== "all" || raceF.length || genderF || lgbtqF || disabilityF || workingF || proximityF.length || directionF.length || topicF.length || statusF.length || authorF.length || stageF.length || typeF.length || showStarred;
+  const clearAll = () => { setSearch(""); setChamber("all"); setPartyF("all"); setRaceF([]); setGenderF(false); setLgbtqF(false); setDisabilityF(false); setWorkingF(false); setProximityF([]); setDirectionF([]); setTopicF([]); setStatusF([]); setAuthorF([]); setStageF([]); setTypeF([]); setCommitteeF([]); setHearingsF(false); setShowStarred(false); };
+  const anyF = search || chamber !== "all" || partyF !== "all" || raceF.length || genderF || lgbtqF || disabilityF || workingF || proximityF.length || directionF.length || topicF.length || statusF.length || authorF.length || stageF.length || typeF.length || committeeF.length || hearingsF || showStarred;
 
   const statFilter = (status) => {
     if (statusF.length === 1 && statusF[0] === status) setStatusF([]);
@@ -1841,6 +1865,10 @@ export default function App() {
                     <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>BILL TYPE</div>
                     <DropdownMulti label="Bill Type" selected={typeF} onChange={setTypeF} options={ALL_BILL_TYPES} year={year} countFn={t => bills.filter(b => b.billType === t && b.year === year).length} />
                   </div>
+                  <div>
+                    <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>COMMITTEE</div>
+                    <DropdownMulti label="Committee" selected={committeeF} onChange={setCommitteeF} options={ALL_COMMITTEES} year={year} countFn={c => bills.filter(b => b.committee === c && b.year === year).length} />
+                  </div>
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "8px", borderTop: "1px solid #151515", paddingTop: "8px", flexWrap: "wrap", gap: "4px" }}>
@@ -1858,6 +1886,7 @@ export default function App() {
                         </div>
                       )}
                     </div>
+                    <FilterBtn label={`📅 Hearings This Week${(() => { const n = bills.filter(b => b.year === year && b.hearingThisWeek).length; return n ? ` (${n})` : ""; })()}`} active={hearingsF} onClick={() => setHearingsF(p => !p)} color="#00E676" />
                   </div>
                   {anyF && <button onClick={clearAll} style={{ background: "transparent", color: "#D50000", border: "1px solid #D5000055", padding: "4px 10px", fontFamily: "var(--m)", fontSize: "11px", fontWeight: 700, cursor: "pointer" }}>CLEAR ALL</button>}
                 </div>
