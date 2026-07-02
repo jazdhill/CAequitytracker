@@ -61,7 +61,7 @@ def classify_direction(client, bill):
         try:
             response = client.messages.create(
                 model=MODEL,
-                max_tokens=10,
+                max_tokens=40,
                 system=SYSTEM_PROMPT,
                 messages=[{"role": "user", "content": prompt}],
                 timeout=30.0,
@@ -69,9 +69,17 @@ def classify_direction(client, bill):
             direction = response.content[0].text.strip().lower()
             tokens = response.usage.input_tokens + response.usage.output_tokens
             if direction not in VALID_DIRECTIONS:
-                # Model sometimes wraps in punctuation/extra words — take first matching token
-                direction = next((d for d in VALID_DIRECTIONS if d in direction), None)
-            return direction, tokens
+                # Model sometimes adds a preamble before the actual word — take the
+                # last matching word, since the real answer tends to land at the end.
+                matches = [(direction.rfind(d), d) for d in VALID_DIRECTIONS if d in direction]
+                direction = max(matches)[1] if matches else None
+            if direction:
+                return direction, tokens
+            if attempt == 2:
+                # Model hedged/refused on a genuinely ambiguous bill across all retries —
+                # "mixed" (ambiguous impact) is the honest bucket for that, not a blank.
+                print(f"  ~ {bill_number} unparseable after 3 tries, defaulting to 'mixed'", flush=True)
+                return "mixed", tokens
         except Exception as e:
             err = str(e)
             if "credit" in err.lower() or "billing" in err.lower():
@@ -115,7 +123,9 @@ def main():
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY, timeout=30.0, max_retries=1)
 
-    total_tokens = 0
+    total_tokens = 0       # full-run total, for the final printed summary
+    checkpoint_tokens = 0  # resets after each commit to metadata
+    checkpoint_requests = 0
     done = 0
     start = time.time()
 
@@ -129,6 +139,7 @@ def main():
             print(f"[{n}/{len(targets)}] {num}  |  ~{remaining:.0f} min remaining  |  {done} done")
 
         direction, tokens = classify_direction(client, bill)
+        checkpoint_requests += 1
 
         if direction is None and tokens == 0:
             print(f"\nStopped at bill {n}/{len(targets)}. {done} classified.")
@@ -138,17 +149,32 @@ def main():
         if direction:
             bills[idx]["equity_analysis"]["direction"] = direction
             total_tokens += tokens
+            checkpoint_tokens += tokens
             done += 1
 
+        # Checkpoint every 100 bills — commit token/request counts here too, not just
+        # at the end, so an interrupted run doesn't lose its energy accounting.
         if n % 100 == 0:
             data["bills"] = bills
+            data["metadata"]["energy_usage"]["total_tokens"] = \
+                data["metadata"]["energy_usage"].get("total_tokens", 0) + checkpoint_tokens
+            data["metadata"]["energy_usage"]["requests_made"] = \
+                data["metadata"]["energy_usage"].get("requests_made", 0) + checkpoint_requests
             with open(DATA_PATH, "w") as f:
                 json.dump(data, f)
             print(f"  ✓ Checkpoint saved ({done} classified)")
+            checkpoint_tokens = 0
+            checkpoint_requests = 0
 
         time.sleep(0.2)
 
+    # Final save — commit whatever's accrued since the last checkpoint
     data["bills"] = bills
+    data["metadata"]["energy_usage"]["total_tokens"] = \
+        data["metadata"]["energy_usage"].get("total_tokens", 0) + checkpoint_tokens
+    data["metadata"]["energy_usage"]["requests_made"] = \
+        data["metadata"]["energy_usage"].get("requests_made", 0) + checkpoint_requests
+
     with open(DATA_PATH, "w") as f:
         json.dump(data, f)
 

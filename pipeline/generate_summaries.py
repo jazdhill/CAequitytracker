@@ -111,7 +111,9 @@ def main():
 
     client = anthropic.Anthropic(api_key=ANTHROPIC_API_KEY, timeout=30.0, max_retries=1)
 
-    total_tokens = 0
+    total_tokens = 0       # full-run total, for the final printed summary
+    checkpoint_tokens = 0  # resets after each commit to metadata
+    checkpoint_requests = 0
     done = 0
     skipped = 0
     start = time.time()
@@ -126,6 +128,7 @@ def main():
             print(f"[{n}/{len(targets)}] {num}  |  ~{remaining:.0f} min remaining  |  {done} done")
 
         summary, tokens = summarize_bill(client, bill)
+        checkpoint_requests += 1
 
         if summary is None and tokens == 0:
             # Check if it was a credit error (returned from inside loop) or just failed
@@ -138,23 +141,31 @@ def main():
         if summary:
             bills[idx]["equity_analysis"]["summary"] = summary
             total_tokens += tokens
+            checkpoint_tokens += tokens
             done += 1
 
-        # Checkpoint every 100 bills
+        # Checkpoint every 100 bills — commit token/request counts here too, not just
+        # at the end, so an interrupted run doesn't lose its energy accounting.
         if n % 100 == 0:
             data["bills"] = bills
+            data["metadata"]["energy_usage"]["total_tokens"] = \
+                data["metadata"]["energy_usage"].get("total_tokens", 0) + checkpoint_tokens
+            data["metadata"]["energy_usage"]["requests_made"] = \
+                data["metadata"]["energy_usage"].get("requests_made", 0) + checkpoint_requests
             with open(DATA_PATH, "w") as f:
                 json.dump(data, f)
             print(f"  ✓ Checkpoint saved ({done} summaries)")
+            checkpoint_tokens = 0
+            checkpoint_requests = 0
 
         time.sleep(0.2)
 
-    # Final save
+    # Final save — commit whatever's accrued since the last checkpoint
     data["bills"] = bills
     data["metadata"]["energy_usage"]["total_tokens"] = \
-        data["metadata"]["energy_usage"].get("total_tokens", 0) + total_tokens
+        data["metadata"]["energy_usage"].get("total_tokens", 0) + checkpoint_tokens
     data["metadata"]["energy_usage"]["requests_made"] = \
-        data["metadata"]["energy_usage"].get("requests_made", 0) + len(targets)
+        data["metadata"]["energy_usage"].get("requests_made", 0) + checkpoint_requests
 
     with open(DATA_PATH, "w") as f:
         json.dump(data, f)
