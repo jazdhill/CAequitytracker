@@ -592,6 +592,14 @@ function normalizeBill(bill) {
   const chamber = /^(AB|ABX|ACR|ACA|AJR|AR)/i.test(rawNum) ? "Assembly"
     : /^(SB|SBX|SCR|SCA|SR)/i.test(rawNum) ? "Senate" : "Other";
 
+  // California's bill-number prefix maps 1:1 to LegiScan's bill_type — derived
+  // locally rather than fetched, since it's fully determined by the prefix.
+  const billType = /^(ACA|SCA)/i.test(rawNum) ? "Constitutional Amendment"
+    : /^(AJR|SJR)/i.test(rawNum) ? "Joint Resolution"
+    : /^(ACR|SCR)/i.test(rawNum) ? "Concurrent Resolution"
+    : /^(AR|SR)/i.test(rawNum) ? "Resolution"
+    : "Bill";
+
   const primarySponsor = (bill.sponsors || [])[0] || {};
 
   // Infer topics from title + description since LegiScan subjects field is empty
@@ -694,6 +702,7 @@ function normalizeBill(bill) {
     lastAction: lastStep?.date || "",
     lastActionText: lastStep?.detail || "",
     stage: lastStep?.label || "Introduced",
+    billType,
     equityProximity,
     equityDirection,
     equityRationale: eq.rationale || "",
@@ -735,6 +744,7 @@ const EQUITY_PROXIMITY = { explicit: "Explicit", structural: "Structural" };
 const EQUITY_DIRECTION = { advances: "Advances equity", threatens: "Threatens equity", mixed: "Mixed" };
 const STATUS_OPTS = ["Signed into Law", "Vetoed", "Passed Legislature", "Referred to Ballot", "Failed in Committee"];
 const STAGE_ORDER = ["Introduced", "Committee", "Fiscal", "Floor (1st)", "2nd Chamber", "Floor (2nd)", "Enrolled", "Signed", "Vetoed", "Failed"];
+const BILL_TYPE_ORDER = ["Bill", "Resolution", "Concurrent Resolution", "Joint Resolution", "Constitutional Amendment"];
 const COLORS = {
   "Black": "#C62828", "Latino/a/e": "#E65100", "Asian": "#6A1B9A", "Indigenous": "#2E7D32",
   "Immigrants": "#0277BD", "MENA": "#00695C", "Gender": "#AD1457", "LGBTQ+": "#7B1FA2",
@@ -1656,6 +1666,10 @@ export default function App() {
     const present = new Set(bills.map(b => b.stage));
     return STAGE_ORDER.filter(s => present.has(s));
   }, [bills]);
+  const ALL_BILL_TYPES = useMemo(() => {
+    const present = new Set(bills.map(b => b.billType));
+    return BILL_TYPE_ORDER.filter(t => present.has(t));
+  }, [bills]);
   const [search, setSearch] = useState("");
   const [chamber, setChamber] = useState("all");
   const [partyF, setPartyF] = useState("all");
@@ -1670,6 +1684,7 @@ export default function App() {
   const [statusF, setStatusF] = useState([]);
   const [authorF, setAuthorF] = useState([]);
   const [stageF, setStageF] = useState([]);
+  const [typeF, setTypeF] = useState([]);
   const [modalBill, setModalBill] = useState(null);
   const [sortBy, setSortBy] = useState("number");
   const [sortDir, setSortDir] = useState("asc");
@@ -1715,9 +1730,10 @@ export default function App() {
     if (topicF.length) b = b.filter(x => x.topics.some(t => topicF.includes(t)));
     if (authorF.length) b = b.filter(x => authorF.includes(x.author));
     if (stageF.length) b = b.filter(x => stageF.includes(x.stage));
+    if (typeF.length) b = b.filter(x => typeF.includes(x.billType));
     if (showStarred) b = b.filter(x => starredIds.includes(x.id));
     return b;
-  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, authorF, stageF, showStarred, starredIds]);
+  }, [bills, year, search, chamber, partyF, raceF, genderF, lgbtqF, disabilityF, workingF, proximityF, directionF, topicF, authorF, stageF, typeF, showStarred, starredIds]);
 
   const filtered = useMemo(() => {
     let b = statusF.length ? filteredBase.filter(x => statusF.includes(x.status)) : filteredBase;
@@ -1729,8 +1745,8 @@ export default function App() {
     return b;
   }, [filteredBase, statusF, sortBy, sortDir]);
 
-  const clearAll = () => { setSearch(""); setChamber("all"); setPartyF("all"); setRaceF([]); setGenderF(false); setLgbtqF(false); setDisabilityF(false); setWorkingF(false); setProximityF([]); setDirectionF([]); setTopicF([]); setStatusF([]); setAuthorF([]); setStageF([]); setShowStarred(false); };
-  const anyF = search || chamber !== "all" || partyF !== "all" || raceF.length || genderF || lgbtqF || disabilityF || workingF || proximityF.length || directionF.length || topicF.length || statusF.length || authorF.length || stageF.length || showStarred;
+  const clearAll = () => { setSearch(""); setChamber("all"); setPartyF("all"); setRaceF([]); setGenderF(false); setLgbtqF(false); setDisabilityF(false); setWorkingF(false); setProximityF([]); setDirectionF([]); setTopicF([]); setStatusF([]); setAuthorF([]); setStageF([]); setTypeF([]); setShowStarred(false); };
+  const anyF = search || chamber !== "all" || partyF !== "all" || raceF.length || genderF || lgbtqF || disabilityF || workingF || proximityF.length || directionF.length || topicF.length || statusF.length || authorF.length || stageF.length || typeF.length || showStarred;
 
   const statFilter = (status) => {
     if (statusF.length === 1 && statusF[0] === status) setStatusF([]);
@@ -1820,6 +1836,10 @@ export default function App() {
                   <div>
                     <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>LIFECYCLE STAGE</div>
                     <DropdownMulti label="Lifecycle Stage" selected={stageF} onChange={setStageF} options={ALL_STAGES} year={year} countFn={s => bills.filter(b => b.stage === s && b.year === year).length} />
+                  </div>
+                  <div>
+                    <div style={{ fontFamily: "var(--m)", fontSize: "11px", color: "#666", letterSpacing: "1px", fontWeight: 700, marginBottom: "6px" }}>BILL TYPE</div>
+                    <DropdownMulti label="Bill Type" selected={typeF} onChange={setTypeF} options={ALL_BILL_TYPES} year={year} countFn={t => bills.filter(b => b.billType === t && b.year === year).length} />
                   </div>
                 </div>
 
