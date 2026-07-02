@@ -1,0 +1,41 @@
+name: Monthly bill update
+
+on:
+  schedule:
+    # 1st of every month, 09:00 UTC (~2am/1am Pacific). GitHub may delay cron
+    # jobs by a few minutes under load — that's fine for a monthly cadence.
+    - cron: "0 9 1 * *"
+  workflow_dispatch: {} # lets you trigger a run manually from the Actions tab
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install anthropic python-dotenv requests
+
+      - name: Run monthly update
+        env:
+          LEGISCAN_API_KEY: ${{ secrets.LEGISCAN_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python pipeline/monthly_update.py
+
+      - name: Commit and push if the dataset changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet public/ca_equity_bills_2025.json; then
+            echo "No changes — nothing to commit."
+            exit 0
+          fi
+          git add public/ca_equity_bills_2025.json
+          git commit -m "Automated monthly bill update ($(date -u +%Y-%m-%d))"
+          git push
