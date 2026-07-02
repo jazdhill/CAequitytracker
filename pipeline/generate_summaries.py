@@ -29,6 +29,9 @@ except ImportError:
     os.system(f"{sys.executable} -m pip install anthropic python-dotenv -q")
     import anthropic
 
+sys.path.insert(0, str(Path(__file__).parent))
+from energy_tracking import commit_energy
+
 DATA_PATH = Path(__file__).parent.parent / "public" / "ca_equity_bills_2025.json"
 MODEL = "claude-haiku-4-5-20251001"  # Haiku: cheaper + faster for short summaries
 
@@ -148,10 +151,7 @@ def main():
         # at the end, so an interrupted run doesn't lose its energy accounting.
         if n % 100 == 0:
             data["bills"] = bills
-            data["metadata"]["energy_usage"]["total_tokens"] = \
-                data["metadata"]["energy_usage"].get("total_tokens", 0) + checkpoint_tokens
-            data["metadata"]["energy_usage"]["requests_made"] = \
-                data["metadata"]["energy_usage"].get("requests_made", 0) + checkpoint_requests
+            commit_energy(data, checkpoint_tokens, checkpoint_requests)
             with open(DATA_PATH, "w") as f:
                 json.dump(data, f)
             print(f"  ✓ Checkpoint saved ({done} summaries)")
@@ -162,10 +162,7 @@ def main():
 
     # Final save — commit whatever's accrued since the last checkpoint
     data["bills"] = bills
-    data["metadata"]["energy_usage"]["total_tokens"] = \
-        data["metadata"]["energy_usage"].get("total_tokens", 0) + checkpoint_tokens
-    data["metadata"]["energy_usage"]["requests_made"] = \
-        data["metadata"]["energy_usage"].get("requests_made", 0) + checkpoint_requests
+    commit_energy(data, checkpoint_tokens, checkpoint_requests)
 
     with open(DATA_PATH, "w") as f:
         json.dump(data, f)

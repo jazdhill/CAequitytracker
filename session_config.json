@@ -1,0 +1,18 @@
+{
+  "session_id": 2172,
+  "session_name": "2025-2026 Regular Session",
+  "years": [2025, 2026],
+  "energy_cap_kwh_per_year": 17,
+  "key_dates": [
+    { "date": "2025-01-06", "label": "Jan 6, 2025", "event": "Session convenes", "tip": "The two-year legislative session officially began. Legislators were sworn in and began introducing bills. California's legislature meets year-round, unlike many other states." },
+    { "date": "2025-02-21", "label": "Feb 21, 2025", "event": "Bill intro deadline (Yr 1)", "tip": "Last day for legislators to introduce new bills in the first year of the session. After this date, no new bills could be submitted until the second year began. 2,828 bills were introduced in Year 1." },
+    { "date": "2025-06-06", "label": "Jun 6, 2025", "event": "Crossover deadline", "tip": "Last day for a bill to pass its house of origin and cross over to the other chamber. Bills that missed this deadline were effectively dead for the year." },
+    { "date": "2025-09-12", "label": "Sep 12, 2025", "event": "Session adjourns (Yr 1)", "tip": "The legislature adjourned for the year. All bills that passed both chambers were sent to the Governor. Bills that did not pass were carried over to 2026 as 'two-year bills.'" },
+    { "date": "2025-10-12", "label": "Oct 12, 2025", "event": "Governor signing deadline", "tip": "Last day for the Governor to sign or veto bills. Newsom signed 999 bills and vetoed 123. Bills he neither signed nor vetoed became law without his signature." },
+    { "date": "2026-01-01", "label": "Jan 1, 2026", "event": "2025 laws took effect", "tip": "Most bills signed during the 2025 session took effect on this date. Urgency measures that passed with a two-thirds vote took effect immediately upon signing." },
+    { "date": "2026-02-20", "label": "Feb 20, 2026", "event": "Bill intro deadline (Yr 2)", "tip": "Last day for legislators to introduce new bills for the second year of the session. All 2026 bills are now in this tracker. Year 2 tends to see fewer introductions — legislators focus on advancing their two-year bills." },
+    { "date": "2026-06-30", "label": "Jun 2026", "event": "Crossover deadline (Yr 2)", "tip": "Last day for a 2026 bill to pass its house of origin and move to the other chamber. Bills that don't cross over by this date are dead for the session." },
+    { "date": "2026-09-30", "label": "Sep 2026", "event": "Session adjourns (Yr 2)", "tip": "The full two-year session ends. Any bills that did not pass both chambers expire and must be reintroduced in the 2027-2028 session." },
+    { "date": "2026-10-31", "label": "Oct 2026", "event": "Governor signing deadline (Yr 2)", "tip": "Last day for the Governor to act on bills from the 2026 session. Bills signed here take effect January 1, 2027." }
+  ]
+}

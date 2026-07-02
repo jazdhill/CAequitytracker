@@ -1,5 +1,6 @@
 "use client";
 import { useState, useMemo, useRef, useEffect, useCallback } from "react";
+import sessionConfig from "../session_config.json";
 
 const BILLS_DATA = [
   {
@@ -1127,28 +1128,20 @@ function Sacramento101({ admin }) {
       </div>
 
       <div style={{ background: "#0c0c0c", border: "1px solid #181818", padding: "16px", marginBottom: "10px" }}>
-        <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "13px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "8px" }}>KEY DATES 2025-2026</h3>
+        <h3 style={{ fontFamily: "var(--m)", color: "#D50000", fontSize: "13px", fontWeight: 700, letterSpacing: "1px", marginTop: 0, marginBottom: "8px" }}>KEY DATES {sessionConfig.years[0]}-{sessionConfig.years[sessionConfig.years.length - 1]}</h3>
         <p style={{ color: "#888", fontSize: "12px", fontFamily: "var(--m)", marginTop: 0, marginBottom: "10px" }}>Hover over any date for more detail on what it means and why it matters.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "8px" }}>
-          {[
-            ["Jan 6, 2025", "Session convenes ✓", "The two-year legislative session officially began. Legislators were sworn in and began introducing bills. California's legislature meets year-round, unlike many other states."],
-            ["Feb 21, 2025", "Bill intro deadline (Yr 1) ✓", "Last day for legislators to introduce new bills in the first year of the session. After this date, no new bills could be submitted until the second year began. 2,828 bills were introduced in Year 1."],
-            ["Jun 6, 2025", "Crossover deadline ✓", "Last day for a bill to pass its house of origin and cross over to the other chamber. Bills that missed this deadline were effectively dead for the year."],
-            ["Sep 12, 2025", "Session adjourns (Yr 1) ✓", "The legislature adjourned for the year. All bills that passed both chambers were sent to the Governor. Bills that did not pass were carried over to 2026 as 'two-year bills.'"],
-            ["Oct 12, 2025", "Governor signing deadline ✓", "Last day for the Governor to sign or veto bills. Newsom signed 999 bills and vetoed 123. Bills he neither signed nor vetoed became law without his signature."],
-            ["Jan 1, 2026", "2025 laws took effect ✓", "Most bills signed during the 2025 session took effect on this date. Urgency measures that passed with a two-thirds vote took effect immediately upon signing."],
-            ["Feb 20, 2026", "Bill intro deadline (Yr 2) ✓", "Last day for legislators to introduce new bills for the second year of the session. All 2026 bills are now in this tracker. Year 2 tends to see fewer introductions — legislators focus on advancing their two-year bills."],
-            ["Jun 2026", "Crossover deadline (Yr 2)", "Last day for a 2026 bill to pass its house of origin and move to the other chamber. Bills that don't cross over by this date are dead for the session."],
-            ["Sep 2026", "Session adjourns (Yr 2)", "The full two-year session ends. Any bills that did not pass both chambers expire and must be reintroduced in the 2027-2028 session."],
-            ["Oct 2026", "Governor signing deadline (Yr 2)", "Last day for the Governor to act on bills from the 2026 session. Bills signed here take effect January 1, 2027."],
-          ].map(([d, e, tip]) => (
-            <Tooltip key={d} text={tip}>
-              <div style={{ display: "flex", gap: "8px", cursor: "help", padding: "4px 0" }}>
-                <span style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "12px", fontWeight: 700, minWidth: "120px" }}>{d}</span>
-                <span style={{ color: "#aaa", fontSize: "13px", fontFamily: "var(--b)", borderBottom: "1px dotted #444" }}>{e}</span>
-              </div>
-            </Tooltip>
-          ))}
+          {sessionConfig.key_dates.map(({ date, label, event, tip }) => {
+            const passed = new Date(date) <= new Date();
+            return (
+              <Tooltip key={date} text={tip}>
+                <div style={{ display: "flex", gap: "8px", cursor: "help", padding: "4px 0" }}>
+                  <span style={{ fontFamily: "var(--m)", color: "#F9A825", fontSize: "12px", fontWeight: 700, minWidth: "120px" }}>{label}</span>
+                  <span style={{ color: "#aaa", fontSize: "13px", fontFamily: "var(--b)", borderBottom: "1px dotted #444" }}>{event}{passed ? " ✓" : ""}</span>
+                </div>
+              </Tooltip>
+            );
+          })}
         </div>
       </div>
     </div>
@@ -1176,15 +1169,18 @@ function AboutPage({ admin, metadata }) {
     </div>
   );
 
-  // Prototyping/build energy is a one-time historical estimate, not tracked in the
-  // pipeline's metadata. Everything else is computed live from the dataset so this
-  // section can't silently go stale the way a hardcoded total would.
-  const prototypingKwh = 2.25;
-  const totalTokens = metadata?.energy_usage?.total_tokens || 0;
-  const classificationKwh = totalTokens / 1_000_000; // ~1 kWh per million tokens, per pipeline convention
+  // The energy cap resets every calendar year, so usage is bucketed by year in
+  // metadata.energy_usage.by_year rather than accumulated forever. Prototyping/build
+  // energy is a one-time historical cost incurred in 2026, folded into that year's
+  // bucket specifically so it doesn't linger in future years' totals.
+  const currentYear = new Date().getFullYear();
+  const prototypingKwh = currentYear === 2026 ? 2.25 : 0;
+  const yearTokens = metadata?.energy_usage?.by_year?.[String(currentYear)]?.tokens || 0;
+  const classificationKwh = yearTokens / 1_000_000; // ~1 kWh per million tokens, per pipeline convention
   const energyUsed = +(prototypingKwh + classificationKwh).toFixed(2);
-  const energyCap = 17;
+  const energyCap = sessionConfig.energy_cap_kwh_per_year;
   const pct = Math.round((energyUsed / energyCap) * 100);
+  const totalTokens = metadata?.energy_usage?.total_tokens || 0; // all-time, for the footer line
 
   return (
     <div>
@@ -1221,10 +1217,10 @@ function AboutPage({ admin, metadata }) {
       <Section id="energy" title="ENERGY & AI ACCOUNTABILITY">
         <p>AI tools consume real energy, use real water for cooling, and produce real carbon emissions. Data centers powering AI disproportionately affect communities of color, who are more likely to live near these facilities and bear the environmental burden of increased electricity demand and water use. A single AI query uses roughly 3 to 10 times more energy than a traditional web search.</p>
         <p>As researchers committed to racial equity, we take this seriously. We have made a deliberate commitment to cap the total AI energy this project uses annually and to report that usage transparently.</p>
-        <p style={{ marginTop: "10px" }}><strong style={{ color: "#fff" }}>Our energy cap: 17 kWh per year.</strong></p>
+        <p style={{ marginTop: "10px" }}><strong style={{ color: "#fff" }}>Our energy cap: {energyCap} kWh per year, resetting every January.</strong></p>
         <p>That is the energy equivalent of driving from UCLA to Los Angeles City Hall once: 13 miles, about half a gallon of gas. The symbolism is intentional: this tool is built by a researcher at UCLA thinking about policy that shapes the city. We believe the tradeoff is worth it for public transparency, but we commit to keeping the footprint small.</p>
-        <p style={{ marginTop: "10px" }}><strong style={{ color: "#F9A825" }}>How the energy budget breaks down:</strong></p>
-        <p>Building and prototyping the tracker used approximately <strong style={{ color: "#fff" }}>{prototypingKwh} kWh</strong>. Classifying and summarizing all 4,863 bills (Claude Sonnet for equity classification, Claude Haiku for direction and plain-English summaries) has used approximately <strong style={{ color: "#fff" }}>{classificationKwh.toFixed(2)} kWh</strong> ({totalTokens.toLocaleString()} tokens at roughly 1 kWh per million tokens) so far. Total so far: <strong style={{ color: "#fff" }}>~{energyUsed} kWh — {pct}% of our annual cap</strong>. The remaining {(energyCap - energyUsed).toFixed(1)} kWh covers monthly status updates through the end of the session. Each monthly update checks for status changes and reclassifies amended bills, using roughly 0.5 to 1 kWh per update.</p>
+        <p style={{ marginTop: "10px" }}><strong style={{ color: "#F9A825" }}>How {currentYear}&rsquo;s energy budget breaks down:</strong></p>
+        <p>{prototypingKwh > 0 && <>Building and prototyping the tracker used approximately <strong style={{ color: "#fff" }}>{prototypingKwh} kWh</strong>. </>}Classifying and summarizing bills (Claude Sonnet for equity classification, Claude Haiku for direction and plain-English summaries) has used approximately <strong style={{ color: "#fff" }}>{classificationKwh.toFixed(2)} kWh</strong> ({yearTokens.toLocaleString()} tokens at roughly 1 kWh per million tokens) so far in {currentYear}. Total this year: <strong style={{ color: "#fff" }}>~{energyUsed} kWh — {pct}% of our annual cap</strong>. The remaining {(energyCap - energyUsed).toFixed(1)} kWh covers monthly status updates through the rest of the year, using roughly 0.5 to 1 kWh per update.</p>
         <p>Browsing, filtering, and searching bills uses zero ongoing AI energy — the dataset is static and filtered entirely in your browser. Classifications are generated in batches ahead of time and published as static data. The one exception is the feedback form (bottom right): submitting it makes a single server request to log your note, but that request never touches an AI model.</p>
         <div style={{ background: "#111", border: "1px solid #222", borderRadius: "2px", height: "20px", marginTop: "8px", overflow: "hidden", position: "relative" }}>
           <div style={{ background: `linear-gradient(90deg, #D50000, #FF6D00)`, width: `${pct}%`, height: "100%", transition: "width 0.5s" }} />
