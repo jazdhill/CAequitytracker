@@ -651,9 +651,12 @@ function normalizeBill(bill) {
   const lc = bill.lifecycle || {};
   const steps = [];
   if (lc.introduced_date) steps.push({ step: 1, label: "Introduced", date: lc.introduced_date, detail: "Read first time" });
-  if (lc.committee_dates?.[0]) steps.push({ step: 2, label: "Committee", date: lc.committee_dates[0], detail: "In Committee" });
-  if (lc.floor_dates?.[0]) steps.push({ step: 4, label: "Floor (1st)", date: lc.floor_dates[0], detail: "Floor vote" });
-  if (lc.passed_house && !lc.floor_dates?.[0]) steps.push({ step: 4, label: "Floor (1st)", date: lc.passed_house, detail: "Passed chamber" });
+  // Bills often get referred to committee or read on the floor more than once —
+  // use the most recent date in each array, not the first, so "last action" reflects
+  // actual current activity instead of the bill's very first committee referral.
+  if (lc.committee_dates?.length) steps.push({ step: 2, label: "Committee", date: lc.committee_dates[lc.committee_dates.length - 1], detail: "In Committee" });
+  if (lc.floor_dates?.length) steps.push({ step: 4, label: "Floor (1st)", date: lc.floor_dates[lc.floor_dates.length - 1], detail: "Floor vote" });
+  if (lc.passed_house && !lc.floor_dates?.length) steps.push({ step: 4, label: "Floor (1st)", date: lc.passed_house, detail: "Passed chamber" });
   if (lc.passed_senate) steps.push({ step: 5, label: "2nd Chamber", date: lc.passed_senate, detail: "Passed second chamber" });
   if (lc.signed_date) steps.push({ step: 8, label: "Signed", date: lc.signed_date, detail: "Signed by Governor" });
   if (lc.vetoed_date) steps.push({ step: 8, label: "Vetoed", date: lc.vetoed_date, detail: "Vetoed by Governor" });
