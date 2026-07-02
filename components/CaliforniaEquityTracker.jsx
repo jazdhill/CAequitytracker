@@ -1752,6 +1752,11 @@ export default function App() {
             <div style={{ fontFamily: "var(--m)", fontSize: "8px", color: "#D50000", letterSpacing: "3px", fontWeight: 700 }}>CALIFORNIA</div>
             <h1 style={{ fontFamily: "var(--s)", fontSize: "26px", fontWeight: 900, lineHeight: 1, color: "#fff", cursor: "pointer" }} onClick={() => setView("bills")}>Equity Legislative Tracker</h1>
             <div style={{ fontFamily: "var(--m)", fontSize: "9px", color: "#444", marginTop: "2px" }}>For students & advocates tracking racial equity in CA policy</div>
+            {metadata?.last_updated && (
+              <div style={{ fontFamily: "var(--m)", fontSize: "9px", color: "#666", marginTop: "2px" }}>
+                Bill data last updated {new Date(metadata.last_updated).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })}
+              </div>
+            )}
           </div>
           <div style={{ display: "flex", gap: "4px", flexWrap: "wrap" }}>
             {[2025, 2026].map(y => <button key={y} onClick={() => { setYear(y); setView("bills"); }} style={{ background: year === y && view === "bills" ? "#D50000" : "#0e0e0e", color: year === y && view === "bills" ? "#fff" : "#444", border: "1px solid #1e1e1e", padding: "4px 12px", fontFamily: "var(--m)", fontWeight: 700, fontSize: "11px", cursor: "pointer" }}>{y}</button>)}
